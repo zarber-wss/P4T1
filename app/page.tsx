@@ -2364,12 +2364,28 @@ export default function PromotionPresentation() {
   const [section21ComparisonStep, setSection21ComparisonStep] = useState(0)
   const totalSections = 31
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [stageScale, setStageScale] = useState(() =>
+    typeof window !== "undefined"
+      ? Math.min(window.innerWidth / 1440, window.innerHeight / 810)
+      : 1
+  )
 
   useEffect(() => {
+    const updateScale = () =>
+      setStageScale(Math.min(window.innerWidth / 1440, window.innerHeight / 810))
     const syncFullscreen = () => setIsFullscreen(Boolean(document.fullscreenElement))
+    const onFullscreenChange = () => {
+      syncFullscreen()
+      updateScale()
+    }
     syncFullscreen()
-    document.addEventListener("fullscreenchange", syncFullscreen)
-    return () => document.removeEventListener("fullscreenchange", syncFullscreen)
+    updateScale()
+    window.addEventListener("resize", updateScale)
+    document.addEventListener("fullscreenchange", onFullscreenChange)
+    return () => {
+      window.removeEventListener("resize", updateScale)
+      document.removeEventListener("fullscreenchange", onFullscreenChange)
+    }
   }, [])
 
   // 离开双圆页后重置「第二步」，下次进入仍从仅双圆开始
@@ -2769,7 +2785,7 @@ export default function PromotionPresentation() {
 
     const handleScroll = () => {
       const scrollTop = container.scrollTop
-      // 与每节 h-full（相对 16:9 画板）、滚动容器 clientHeight 一致
+      // 与每节 h-full（相对 810px 高设计画板）、滚动容器 clientHeight 一致
       const sectionHeight = container.clientHeight || window.innerHeight
       // 用视口中线判定当前页，避免 smooth 滚动过程中 Math.round 与按键翻页不同步（多按一次才翻页）
       const centerLine = scrollTop + sectionHeight / 2
@@ -2781,14 +2797,22 @@ export default function PromotionPresentation() {
     return () => container.removeEventListener("scroll", handleScroll)
   }, [])
 
+  const scaledW = 1440 * stageScale
+  const scaledH = 810 * stageScale
+
   return (
-    <div className="fixed inset-0 z-0 bg-black">
-      <div className="flex h-full w-full min-h-0 items-center justify-center">
+    <div className="fixed inset-0 z-0 flex h-screen w-screen items-center justify-center overflow-hidden bg-[#050B14]">
+      <div
+        className="flex shrink-0 items-center justify-center overflow-hidden"
+        style={{ width: scaledW, height: scaledH }}
+      >
         <div
-          className="relative isolate min-h-0 overflow-hidden bg-[#050B14] shadow-2xl [container-type:size]"
+          className="relative isolate min-h-0 shrink-0 overflow-hidden bg-[#050B14] shadow-2xl [container-type:size]"
           style={{
-            width: "min(100dvw, calc(100dvh * 16 / 9))",
-            height: "min(100dvh, calc(100dvw * 9 / 16))",
+            width: 1440,
+            height: 810,
+            transform: `scale(${stageScale})`,
+            transformOrigin: "center center",
           }}
         >
           <div
