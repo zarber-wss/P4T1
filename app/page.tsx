@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { AnimatePresence, motion, useInView } from "framer-motion"
+import { motion, useInView } from "framer-motion"
 import { WaveCanvas } from "@/components/wave-canvas"
 
 // Animation variants for fade-in-up effect
@@ -35,7 +35,7 @@ function Section1() {
 
       {/* Left bottom watermark */}
       <div className="absolute bottom-8 left-10 text-slate-600 text-sm font-light tracking-wider z-10">
-        4399UED · 2026.03
+        4399UED · 2026.04
       </div>
 
       {/* Main content - positioned in top 2/3 of screen */}
@@ -74,9 +74,9 @@ function Section1() {
         <motion.div 
           variants={fadeInUp}
         >
-          <div className="flex items-center gap-4 px-8 py-4 rounded-full bg-[#1b2cf4] text-white text-base md:text-lg font-medium">
+          <div className="flex items-center gap-5 px-10 py-5 rounded-full bg-[#1b2cf4] text-white text-lg font-medium md:gap-6 md:px-12 md:py-5 md:text-xl lg:text-2xl">
             <span>By 吴珊珊</span>
-            <span className="w-px h-5 bg-white/30" />
+            <span className="w-px h-5 shrink-0 bg-white/30 md:h-6" />
             <span>UED交互2组</span>
           </div>
         </motion.div>
@@ -108,14 +108,14 @@ function Section2() {
         animate={isInView ? "visible" : "hidden"}
         className="relative z-10 w-full max-w-6xl"
       >
-        {/* Bento Grid - solid cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-          {/* Left Card - Profile (spans 2 rows) */}
+        {/* md+：左个人信息 + 右列上下两张卡（flex 保证横排，避免 grid row-span 排成单列） */}
+        <div className="flex flex-col gap-5 md:flex-row md:items-stretch md:gap-6">
+          {/* Left Card - Profile */}
           <motion.div 
             variants={fadeInUp}
-            className="md:row-span-2"
+            className="flex w-full shrink-0 flex-col md:w-[42%] lg:w-[40%] md:self-stretch"
           >
-            <div className="h-full p-10 rounded-2xl bg-[#111827] border border-white/5">
+            <div className="flex h-full min-h-0 flex-col p-10 rounded-2xl bg-[#111827] border border-white/5">
               {/* Avatar with emoji - larger */}
               <div className="w-32 h-32 mx-auto rounded-full bg-[#1b2cf4] flex items-center justify-center text-6xl">
                 👩‍🎨
@@ -133,60 +133,133 @@ function Section2() {
               
               {/* Role badge - solid blue pill */}
               <div className="mt-4 flex justify-center">
-                <span className="px-4 py-1.5 rounded-full bg-[#1b2cf4] text-white text-base font-medium">
+                <span className="rounded-full bg-[#1b2cf4] px-5 py-2 text-lg font-medium text-white md:px-6 md:py-2.5 md:text-xl">
                   交互2组 组长
                 </span>
               </div>
             </div>
           </motion.div>
 
-          {/* Right Top Card - Experience */}
-          <motion.div 
-            variants={fadeInUp}
-            className="md:col-span-2"
-          >
-            <div className="h-full p-8 rounded-2xl bg-[#111827] border border-white/5">
-              <div className="flex items-baseline gap-4">
-                <span className="text-6xl md:text-7xl font-black text-[#77fbd1]">
-                  8 年
-                </span>
-                <span className="text-slate-300 text-xl">工作经验</span>
+          <div className="flex min-w-0 flex-col gap-5 md:min-h-0 md:flex-1 md:flex-col md:gap-6">
+            {/* Right Top Card - Experience */}
+            <motion.div variants={fadeInUp} className="shrink-0">
+              <div className="p-8 rounded-2xl bg-[#111827] border border-white/5">
+                <div className="flex items-baseline gap-4">
+                  <span className="text-6xl md:text-7xl font-black text-[#77fbd1]">
+                    8 年
+                  </span>
+                  <span className="text-slate-300 text-xl">工作经验</span>
+                </div>
+                <div className="mt-4 text-slate-300 text-lg">
+                  <span className="inline-flex items-center px-4 py-2 rounded-full bg-[#1b2cf4]/25 border border-[#1b2cf4]/35 text-slate-100 text-base md:text-lg font-medium">
+                    华侨大学 · 工业设计专业
+                  </span>
+                </div>
               </div>
-              <div className="mt-4 text-slate-300 text-lg">
-                <span className="inline-flex items-center px-4 py-2 rounded-full bg-[#1b2cf4]/25 border border-[#1b2cf4]/35 text-slate-100 text-base md:text-lg font-medium">
-                  华侨大学 · 工业设计专业
-                </span>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Right Bottom Card - Business Scope */}
-          <motion.div 
-            variants={fadeInUp}
-            className="md:col-span-2"
-          >
-            <div className="h-full p-8 rounded-2xl bg-[#111827] border border-white/5">
-              <div className="grid grid-cols-2 gap-6">
-                {/* Left column */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xl">💻</span>
-                    <h3 className="text-slate-300 text-base uppercase tracking-widest">主要负责</h3>
+            {/* Right Bottom Card - Business Scope：md 起拉高与左侧卡片底对齐 */}
+            <motion.div variants={fadeInUp} className="flex min-h-0 flex-col md:flex-1">
+              <div className="flex min-h-0 flex-col rounded-2xl border border-white/5 bg-[#111827] p-8 md:flex-1 md:justify-center">
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Left column */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xl">💻</span>
+                      <h3 className="text-slate-300 text-base uppercase tracking-widest">主要负责</h3>
+                    </div>
+                    <p className="text-white text-xl md:text-2xl font-semibold">3387游戏</p>
                   </div>
-                  <p className="text-white text-xl md:text-2xl font-semibold">3387游戏</p>
-                </div>
-                
-                {/* Divider */}
-                <div className="border-l border-white/10 pl-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xl">✅</span>
-                    <h3 className="text-slate-300 text-base uppercase tracking-widest">质量把关</h3>
+
+                  {/* Divider */}
+                  <div className="border-l border-white/10 pl-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xl">✅</span>
+                      <h3 className="text-slate-300 text-base uppercase tracking-widest">质量把关</h3>
+                    </div>
+                    <p className="text-white text-xl md:text-2xl font-semibold">安卓游戏盒 / 3387 游戏</p>
                   </div>
-                  <p className="text-white text-xl md:text-2xl font-semibold">安卓游戏盒 / 3387 游戏</p>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+    </section>
+  )
+}
+
+/** 第三屏：目录 /「接下来，我想聊聊这些」（字号层级、间距与参考图一致；底光/水印与首、二屏统一） */
+function SectionTableOfContents() {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.35 })
+
+  const items = [
+    { num: "01", zh: "专业能力", en: "PROFESSIONAL ABILITY" },
+    { num: "02", zh: "AI赋能", en: "AI EMPOWERMENT" },
+    { num: "03", zh: "团队建设", en: "TEAM BUILDING" },
+    { num: "04", zh: "未来计划", en: "FUTURE PLANS" },
+  ] as const
+
+  return (
+    <section
+      className="relative flex h-full w-full snap-start items-center overflow-hidden py-10 pl-10 pr-12 md:py-0 md:pl-20 md:pr-24 lg:pl-24 lg:pr-28"
+      style={{ backgroundColor: "#050B14" }}
+    >
+      {/* 与第二屏一致的底光 */}
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-[#1b2cf4]/22 via-[#1b2cf4]/08 to-transparent" />
+      {/* 与首屏一致的左下角水印 */}
+      <div className="pointer-events-none absolute bottom-8 left-10 z-10 text-sm font-light tracking-wider text-slate-600">
+        4399UED · 2026.04
+      </div>
+
+      <motion.div
+        ref={ref}
+        variants={staggerContainer}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-start gap-10 md:flex-row md:items-center md:justify-between md:gap-24 lg:gap-32"
+      >
+        {/* 左栏：略加宽以便标题单行；md+ 整体上移，右栏不动 */}
+        <div className="flex max-w-full flex-col items-start gap-4 md:w-[40%] md:max-w-none md:shrink-0 md:-translate-y-20 md:gap-5 md:pl-2 lg:-translate-y-24 lg:pl-4">
+          <motion.span
+            variants={fadeInUp}
+            className="rounded-full bg-[#77fbd1]/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.32em] text-[#77fbd1] md:px-3.5 md:py-2 md:text-[11px]"
+          >
+            CONTENTS
+          </motion.span>
+          <motion.h2
+            variants={fadeInUp}
+            className="max-w-[min(100%,22rem)] text-4xl font-black leading-tight tracking-tight text-white sm:max-w-none sm:text-5xl md:text-6xl md:leading-tight lg:text-7xl xl:text-7xl"
+          >
+            接下来，我想聊聊这些
+          </motion.h2>
+          <motion.div
+            variants={fadeInUp}
+            className="h-1.5 w-16 rounded-full bg-gradient-to-r from-[#77fbd1] to-[#1b2cf4] md:h-2 md:w-20"
+            aria-hidden
+          />
+        </div>
+
+        {/* 右栏：整体变窄，靠右对齐，与右页边留白加大 */}
+        <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col gap-5 md:ml-auto md:mr-2 md:w-full md:max-w-[32rem] md:flex-none md:gap-5 lg:mr-4 lg:max-w-[34rem] lg:gap-6">
+          {items.map((row) => (
+            <motion.div
+              key={row.num}
+              variants={fadeInUp}
+              className="flex items-center gap-6 rounded-2xl border border-white/10 bg-[#111827] px-7 py-5 shadow-sm shadow-black/25 md:gap-8 md:rounded-3xl md:px-9 md:py-6"
+            >
+              <span className="select-none text-5xl font-black italic leading-none text-[#77fbd1] tabular-nums md:text-6xl lg:text-7xl">
+                {row.num}
+              </span>
+              <div className="min-w-0 flex-1 border-l border-white/10 pl-6 md:pl-8">
+                <p className="text-xl font-bold leading-snug text-white md:text-2xl lg:text-3xl">{row.zh}</p>
+                <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-400 md:text-xs">
+                  {row.en}
+                </p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </motion.div>
     </section>
@@ -195,7 +268,7 @@ function Section2() {
 
 /** 章节过渡页右上角气泡（规范：当前章蓝色实心，其余线框透明），用于 page3 / 第二章节过渡 / page22，及团队章内容页 page23–page27 */
 function ChapterTransitionNavBubbles({ active }: { active: 1 | 2 | 3 | 4 }) {
-  const labels = ["01 设计实践", "02 AI提效", "03 团队建设", "04 未来计划"] as const
+  const labels = ["01 专业能力", "02 AI赋能", "03 团队建设", "04 未来计划"] as const
   return (
     <div className="pointer-events-none absolute top-4 right-4 z-20 flex max-w-[calc(100%-2rem)] flex-row flex-wrap items-center justify-end gap-1.5 md:top-6 md:right-6 md:gap-2">
       {labels.map((label, i) => {
@@ -310,7 +383,7 @@ function Section3ChapterDesign() {
     <ChapterTransitionLayout
       watermarkDigit="01"
       chapterLabel="Chapter 01"
-      title="01 设计实践"
+      title="01 专业能力"
       subtitle="不仅仅是画图"
       activeModule={1}
     />
@@ -319,19 +392,21 @@ function Section3ChapterDesign() {
 
 const section3CircleGradient =
   "rounded-full border-0 flex flex-col items-center justify-center bg-gradient-to-b from-[#13284c] to-[#020508] shadow-none"
+/** 与第 5 屏双圆圈卡片相同的纵向渐变（矩形卡面复用） */
+const section3CircleFillGradient = "bg-gradient-to-b from-[#13284c] to-[#020508]"
 
 const section3CircleSize =
   "w-60 h-60 md:w-80 md:h-80 lg:w-[22rem] lg:h-[22rem] xl:w-96 xl:h-96"
 
-/** 设计实践章节：右上角横向定位气泡（与双圆页同款，可复用到多页） */
+/** 专业能力章节：右上角横向定位气泡（与双圆页同款，可复用到多页） */
 function SectionDesignNavBubbles() {
   return (
     <div className="pointer-events-none absolute top-4 right-4 z-20 flex max-w-[calc(100%-2rem)] flex-row flex-wrap items-center justify-end gap-1.5 md:top-6 md:right-6 md:gap-2">
       <div className="px-2.5 py-1 whitespace-nowrap rounded-full border border-[#1b2cf4] bg-[#1b2cf4] text-[11px] font-bold text-white shadow-md shadow-[#1b2cf4]/35 md:px-3 md:py-1.5 md:text-xs">
-        01 设计实践
+        01 专业能力
       </div>
       <div className="px-2.5 py-1 whitespace-nowrap rounded-full border border-white/20 bg-slate-900/85 text-[11px] font-medium text-white backdrop-blur-sm md:px-3 md:py-1.5 md:text-xs">
-        02 AI提效
+        02 AI赋能
       </div>
       <div className="px-2.5 py-1 whitespace-nowrap rounded-full border border-white/15 bg-slate-900/70 text-[11px] text-slate-200 md:px-3 md:py-1.5 md:text-xs">
         03 团队建设
@@ -343,15 +418,15 @@ function SectionDesignNavBubbles() {
   )
 }
 
-/** AI提效页右上角定位气泡：02 AI提效 蓝色高亮，其他为线性按钮 */
+/** AI赋能页右上角定位气泡：02 AI赋能 蓝色高亮，其他为线性按钮 */
 function SectionDesignNavBubblesAI() {
   return (
     <div className="pointer-events-none absolute top-4 right-4 z-20 flex max-w-[calc(100%-2rem)] flex-row flex-wrap items-center justify-end gap-1.5 md:top-6 md:right-6 md:gap-2">
       <div className="px-2.5 py-1 whitespace-nowrap rounded-full border border-white/20 bg-transparent text-[11px] font-medium text-slate-300 backdrop-blur-sm md:px-3 md:py-1.5 md:text-xs">
-        01 设计实践
+        01 专业能力
       </div>
       <div className="px-2.5 py-1 whitespace-nowrap rounded-full border border-[#1b2cf4] bg-[#1b2cf4] text-[11px] font-bold text-white shadow-md shadow-[#1b2cf4]/35 md:px-3 md:py-1.5 md:text-xs">
-        02 AI提效
+        02 AI赋能
       </div>
       <div className="px-2.5 py-1 whitespace-nowrap rounded-full border border-white/20 bg-transparent text-[11px] font-medium text-slate-300 md:px-3 md:py-1.5 md:text-xs">
         03 团队建设
@@ -363,7 +438,7 @@ function SectionDesignNavBubblesAI() {
   )
 }
 
-/** 双圆页共用：底光、右上标签、水印 */
+/** 专业能力章内容页共用：底光、右上标签、左下水印 */
 function Section3Ambient() {
   return (
     <>
@@ -376,140 +451,268 @@ function Section3Ambient() {
   )
 }
 
-/** 双圆核心理念：单页 PPT — 仅双圆 → 翻页器/点击后双圆平滑上移并出现 💡，再翻页进入下一页 */
-function Section3({
-  insightRevealed,
-  onInsightReveal,
-}: {
-  insightRevealed: boolean
-  onInsightReveal: () => void
-}) {
+/** 第 5 屏：设计思维的转变（布局/文案/配色参考设计稿；底光与右上标签仍用 Section3Ambient） */
+function Section3({ footerRevealed }: { footerRevealed: boolean }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.35 })
 
-  const handleStagePointer = () => {
-    if (!insightRevealed) onInsightReveal()
-  }
+  /** 「数据目标」实底标签 */
+  const dataGoalTagBg = "#59BF9F"
+  /** 其余强调绿字：做起来、底部高亮词 */
+  const accentMint = "#76FCD0"
+
+  const dottedTagCls =
+    "relative z-20 rounded-lg border border-dashed border-white/55 bg-black/40 px-4 py-2 text-base font-semibold text-white backdrop-blur-[2px] md:px-5 md:py-2.5 md:text-lg lg:px-6 lg:py-3 lg:text-xl"
 
   return (
     <section
       className="relative h-full w-full snap-start flex flex-col overflow-hidden px-6 md:px-12 lg:px-20"
-      style={{ backgroundColor: "#050B14" }}
+      style={{ backgroundColor: "#000000" }}
       data-section="dual-circles"
     >
       <Section3Ambient />
+
+      {/* 左上：标题区（参考图） */}
+      <div className="pointer-events-none absolute left-8 top-8 z-20 md:left-14 md:top-10 lg:left-16">
+        <div className="pointer-events-auto flex items-start gap-3 md:gap-3.5">
+          <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#1b2cf4] md:mt-2.5 md:h-3 md:w-3" aria-hidden />
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-white md:text-3xl lg:text-4xl">设计思维的转变</h2>
+            <p className="mt-1 text-sm font-medium text-slate-500 md:mt-1.5 md:text-base">Design Mindset Shift</p>
+          </div>
+        </div>
+      </div>
+
       <div
         ref={ref}
-        role="presentation"
-        onClick={handleStagePointer}
-        onKeyDown={(e) => {
-          if (insightRevealed) return
-          if (e.key === "Enter") {
-            e.preventDefault()
-            onInsightReveal()
-          }
-        }}
-        tabIndex={-1}
-        className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-start outline-none pt-[max(3rem,calc(50cqh-11rem))] md:pt-[max(4rem,calc(50cqh-13rem))] lg:pt-[max(5rem,calc(50cqh-14rem))]"
+        className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center px-2 pb-24 pt-[5.5rem] md:pb-28 md:pt-24 lg:pt-28"
       >
-        {/* 不用 justify-center：否则 💡 插入后列变高会重新垂直居中，双圆会瞬间跳一帧（像闪一下） */}
         <div className="flex w-full max-w-[min(100%,80rem)] flex-col items-center">
-          {/* 仅双圆做轻微平滑上移，与下方卡片拉开间距 */}
           <motion.div
-            animate={{
-              y: insightRevealed ? -16 : 0,
-            }}
-            transition={{
-              type: "tween",
-              duration: 0.52,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
-            className="shrink-0"
+            variants={staggerContainer}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            className="flex w-full flex-col items-stretch justify-center gap-8 md:flex-row md:items-center md:gap-3 lg:gap-5 xl:gap-6"
           >
+            {/* 左：把方案画出来 + 标签 */}
             <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              className="flex flex-row flex-nowrap items-center justify-center gap-8 md:gap-14 lg:gap-20"
+              variants={fadeInUp}
+              className="flex flex-col items-center md:flex-1"
             >
-              <motion.div
-                variants={fadeInUp}
-                className={`${section3CircleSize} ${section3CircleGradient}`}
-              >
-                <span className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-white font-medium [text-shadow:none]">
+              <div className={`relative z-10 ${section3CircleSize} ${section3CircleGradient}`}>
+                <span className="text-2xl font-medium text-white md:text-3xl lg:text-4xl xl:text-5xl [text-shadow:none]">
                   把方案
                 </span>
-                <span
-                  className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl text-[#77fbd1] font-black mt-2 md:mt-3 [text-shadow:none] drop-shadow-none"
-                  style={{ textShadow: "none", filter: "none" }}
-                >
+                <span className="mt-2 text-3xl font-black text-white md:mt-3 md:text-5xl lg:text-6xl xl:text-7xl [text-shadow:none] md:leading-tight">
                   画出来
                 </span>
-              </motion.div>
+              </div>
+              <div className="z-20 -mt-14 flex flex-wrap items-center justify-center gap-2 md:-mt-16 md:gap-3 lg:-mt-20">
+                <span className={dottedTagCls}>业务需求</span>
+                <span className="text-2xl font-light text-slate-400 md:text-3xl" aria-hidden>
+                  +
+                </span>
+                <span className={dottedTagCls}>用户体验</span>
+              </div>
+            </motion.div>
 
-              <motion.div variants={fadeInUp} className="flex items-center text-slate-500 shrink-0">
-                <svg
-                  className="w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 xl:w-20 xl:h-20"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden
-                >
-                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                  <path d="M15.59 16.59L20.17 12 15.59 7.41 17 6l6 6-6 6-1.41-1.41z" />
-                </svg>
-              </motion.div>
-
-              <motion.div
-                variants={fadeInUp}
-                className={`${section3CircleSize} ${section3CircleGradient}`}
+            {/* 中：双箭头 */}
+            <motion.div variants={fadeInUp} className="flex shrink-0 items-center justify-center text-slate-500">
+              <svg
+                className="h-9 w-9 rotate-90 md:h-14 md:w-14 md:rotate-0 lg:h-16 lg:w-16 xl:h-20 xl:w-20"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden
               >
-                <span className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-white font-medium [text-shadow:none]">
+                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                <path d="M15.59 16.59L20.17 12 15.59 7.41 17 6l6 6-6 6-1.41-1.41z" />
+              </svg>
+            </motion.div>
+
+            {/* 右：把项目做起来 + 标签 */}
+            <motion.div
+              variants={fadeInUp}
+              className="flex flex-col items-center md:flex-1"
+            >
+              <div className={`relative z-10 ${section3CircleSize} ${section3CircleGradient}`}>
+                <span className="text-2xl font-medium text-white md:text-3xl lg:text-4xl xl:text-5xl [text-shadow:none]">
                   把项目
                 </span>
                 <span
-                  className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl text-[#77fbd1] font-black mt-2 md:mt-3 [text-shadow:none] drop-shadow-none"
-                  style={{ textShadow: "none", filter: "none" }}
+                  className="mt-2 text-3xl font-black md:mt-3 md:text-5xl lg:text-6xl xl:text-7xl [text-shadow:none] md:leading-tight"
+                  style={{ color: accentMint }}
                 >
                   做起来
                 </span>
-              </motion.div>
+              </div>
+              <div className="z-20 -mt-14 flex flex-wrap items-center justify-center gap-2 md:-mt-16 md:gap-3 lg:-mt-20">
+                <span
+                  className="relative z-20 rounded-lg px-4 py-2 text-base font-bold text-white shadow-sm md:px-5 md:py-2.5 md:text-lg lg:px-6 lg:py-3 lg:text-xl"
+                  style={{ backgroundColor: dataGoalTagBg }}
+                >
+                  数据目标
+                </span>
+                <span className="text-2xl font-light text-slate-400 md:text-3xl" aria-hidden>
+                  +
+                </span>
+                <span className={dottedTagCls}>用户体验</span>
+              </div>
             </motion.div>
           </motion.div>
 
-          <AnimatePresence>
-            {insightRevealed && (
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 16 }}
-                transition={{
-                  duration: 0.52,
-                  delay: 0.08,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-                className="mt-6 md:mt-8 w-full max-w-4xl px-2"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="rounded-2xl border border-white/10 bg-[#111827] px-3 py-3 md:rounded-3xl md:px-4 md:py-4 lg:px-5 lg:py-5">
-                  <p className="flex flex-row flex-nowrap items-center justify-center gap-2 text-center text-lg font-medium tracking-wide text-white md:text-xl lg:text-2xl whitespace-nowrap">
-                    <span className="text-2xl md:text-3xl shrink-0" aria-hidden>
-                      💡
-                    </span>
-                    <span className="leading-snug">
-                      向上有业务思考，向下打磨设计细节
-                    </span>
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* 底部结论条：默认透明占位，翻页器点击后渐显，不占位变化避免版面位移 */}
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            className="mt-10 flex w-full justify-center px-2 md:mt-12 lg:mt-14"
+          >
+            <div
+              className={`w-fit max-w-[min(100%,78rem)] rounded-full border border-white/10 bg-[#0d1623] px-12 py-3.5 text-center text-xl font-medium leading-snug text-white shadow-lg shadow-black/30 transition-opacity duration-300 md:px-[5.25rem] md:py-4 md:text-2xl lg:px-24 lg:py-4 lg:text-3xl ${
+                footerRevealed ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}
+              aria-hidden={!footerRevealed}
+            >
+              以<span style={{ color: accentMint }}>数据</span>为导向的<span style={{ color: accentMint }}>增长</span>体验设计
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
   )
 }
 
-// Section 4: Page5 - 需求内容
+/** 第 6 / 13 / 17 屏：与第 5 屏同底、水印、右上章节气泡；双 Step 卡片（第 13、17 屏可默认隐藏 STEP 02） */
+function SectionTargetExecute({
+  step2ExtraRevealed,
+  onRevealStep2,
+  slide17SideHints = false,
+}: {
+  step2ExtraRevealed?: boolean
+  onRevealStep2?: () => void
+  /** 仅第 17 屏：主标题右侧灰色延伸文案 */
+  slide17SideHints?: boolean
+} = {}) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.35 })
+  const mint = "#76FCD0"
+  const step1Accent = "#63C4F5"
+  const showStep2 = step2ExtraRevealed !== false
+  const needsStep2Reveal = step2ExtraRevealed === false
+
+  return (
+    <section
+      className="relative flex h-full w-full snap-start flex-col overflow-hidden px-6 md:px-12 lg:px-20"
+      style={{
+        backgroundColor: "#000000",
+        ...(needsStep2Reveal ? { cursor: "pointer" } : {}),
+      }}
+      onClick={() => {
+        if (needsStep2Reveal && onRevealStep2) onRevealStep2()
+      }}
+      role="presentation"
+    >
+      <Section3Ambient />
+      <div
+        ref={ref}
+        className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center py-10 md:py-14 lg:py-16"
+      >
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="flex w-full max-w-[min(100%,52rem)] flex-col items-center gap-10 md:max-w-[56rem] md:gap-12 lg:max-w-[60rem] lg:gap-14"
+        >
+          <div className="flex flex-col items-center text-center">
+            <motion.h2
+              variants={fadeInUp}
+              className="w-full max-w-none whitespace-nowrap text-center text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl"
+            >
+              以<span style={{ color: mint }}>数据</span>为导向的增长体验设计
+            </motion.h2>
+          </div>
+
+          <div className="flex w-full flex-col gap-6 md:gap-8 lg:gap-9">
+            <motion.div
+              variants={fadeInUp}
+              className="rounded-2xl border-2 bg-[#111827] px-6 py-6 shadow-md shadow-black/20 md:rounded-3xl md:px-10 md:py-8 lg:px-12 lg:py-9"
+              style={{ borderColor: step1Accent }}
+            >
+              <div className="min-w-0 text-left">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/70 md:text-xs lg:text-sm">
+                  <span style={{ color: step1Accent }}>STEP 01</span>
+                  <span className="text-white/40"> / </span>
+                  <span
+                    className="text-sm font-bold tracking-normal md:text-base lg:text-lg"
+                    style={{ color: step1Accent }}
+                  >
+                    业务视角
+                  </span>
+                </p>
+                {slide17SideHints ? (
+                  <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 md:mt-4 lg:mt-5">
+                    <p className="min-w-0 text-xl font-bold leading-snug text-white md:text-2xl lg:text-3xl xl:text-4xl">
+                      拆解数据目标，找准策略方向
+                    </p>
+                    <p className="shrink-0 text-base font-medium leading-snug text-slate-400 md:text-lg lg:text-xl">
+                      👉🏻落地到首页，展示新人券
+                    </p>
+                  </div>
+                ) : (
+                  <p className="mt-3 text-xl font-bold leading-snug text-white md:mt-4 md:text-2xl lg:mt-5 lg:text-3xl xl:text-4xl">
+                    拆解数据目标，找准策略方向
+                  </p>
+                )}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={false}
+              animate={{ opacity: showStep2 ? 1 : 0 }}
+              transition={{ duration: 0.35 }}
+              className={showStep2 ? "w-full" : "pointer-events-none w-full"}
+            >
+              <motion.div
+                variants={fadeInUp}
+                className="rounded-2xl border-2 bg-[#111827] px-6 py-6 shadow-md shadow-black/20 md:rounded-3xl md:px-10 md:py-8 lg:px-12 lg:py-9"
+                style={{ borderColor: mint }}
+              >
+                <div className="min-w-0 text-left">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/70 md:text-xs lg:text-sm">
+                    <span style={{ color: mint }}>STEP 02</span>
+                    <span className="text-white/40"> / </span>
+                    <span
+                      className="text-sm font-bold tracking-normal md:text-base lg:text-lg"
+                      style={{ color: mint }}
+                    >
+                      设计视角
+                    </span>
+                  </p>
+                  {slide17SideHints ? (
+                    <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 md:mt-4 lg:mt-5">
+                      <p className="min-w-0 text-xl font-bold leading-snug text-white md:text-2xl lg:text-3xl xl:text-4xl">
+                        结合设计心理，引导用户行为
+                      </p>
+                      <p className="shrink-0 text-base font-medium leading-snug text-slate-400 md:text-lg lg:text-xl">
+                        👉🏻稀缺性、沉没成本、福格行为模型…
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="mt-3 text-xl font-bold leading-snug text-white md:mt-4 md:text-2xl lg:mt-5 lg:text-3xl xl:text-4xl">
+                      结合设计心理，引导用户行为
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+// Section 4: Page5 - 业务需求
 function Section4({
   demandExtraRevealed,
   onDemandExtraReveal,
@@ -532,16 +735,24 @@ function Section4({
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
         className="absolute left-0 z-10 flex items-center pl-16 md:pl-24 lg:pl-32"
-        style={{ width: "58%", top: "50%", transform: "translateY(-50%)" }}
-        onClick={() => { if (!demandExtraRevealed && onDemandExtraReveal) onDemandExtraReveal() }}
-        style={{ cursor: demandExtraRevealed ? "default" : "pointer", width: "58%", top: "50%", transform: "translateY(-50%)" }}
+        style={{
+          width: "58%",
+          top: "50%",
+          transform: "translateY(-50%)",
+          cursor: demandExtraRevealed ? "default" : "pointer",
+        }}
+        onClick={() => {
+          if (!demandExtraRevealed && onDemandExtraReveal) onDemandExtraReveal()
+        }}
       >
         <motion.div variants={fadeInUp} className="flex flex-col items-start text-left gap-12">
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold tracking-wide text-slate-400 md:text-xl">需求内容</h3>
-            <h2 className="text-4xl font-bold leading-snug text-white md:text-5xl lg:text-6xl xl:text-7xl">
-              <span className="text-[#77fbd1] block">新人礼页面</span>
-              <span className="text-white block">引导用户去游戏专区</span>
+            <h3 className="text-xl font-semibold tracking-wide text-slate-400 md:text-2xl lg:text-3xl">
+              业务需求
+            </h3>
+            <h2 className="text-3xl font-bold leading-snug text-white md:text-4xl lg:text-5xl xl:text-6xl">
+              <span className="block text-[#77fbd1]">新人礼页面</span>
+              <span className="block text-white">引导用户去游戏专区</span>
             </h2>
           </div>
           <div className="min-h-[5.5rem]">
@@ -551,8 +762,12 @@ function Section4({
               transition={{ duration: 0.3 }}
               className="space-y-3"
             >
-              <h3 className="text-lg font-semibold tracking-wide text-slate-400 md:text-xl">需求目标</h3>
-              <p className="text-3xl md:text-4xl font-medium text-white leading-snug">提高新用户的下载转化率</p>
+              <h3 className="text-xl font-semibold tracking-wide text-slate-400 md:text-2xl lg:text-3xl">
+                数据目标
+              </h3>
+              <p className="text-3xl font-medium leading-snug text-white md:text-4xl lg:text-5xl">
+                提高新用户的下载转化率
+              </p>
             </motion.div>
           </div>
         </motion.div>
@@ -588,7 +803,7 @@ function Section4({
   )
 }
 
-// Section 4B: Page6 - 3387的新用户 完成新游戏下载需要几步？
+// Section 4B: Page6 - 3387新用户 从启动到下载几步
 function Section4B() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.3 })
@@ -607,18 +822,18 @@ function Section4B() {
       >
         <motion.h2
           variants={fadeInUp}
-          className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight"
+          className="text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          3387的新用户
+          3387新用户
         </motion.h2>
-        <motion.h2
-          variants={fadeInUp}
-          className="mt-5 md:mt-6 text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight"
-        >
-          完成新游戏下载
-          <span className="text-[#77fbd1]">需要几步</span>
-          ❓
-        </motion.h2>
+        <div className="mt-5 flex w-full min-w-0 justify-center overflow-hidden px-2 md:mt-6">
+          <motion.h2
+            variants={fadeInUp}
+            className="inline-block max-w-full whitespace-nowrap text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
+          >
+            从启动app到下载游戏<span className="text-[#77fbd1]">需要几步？</span>
+          </motion.h2>
+        </div>
       </motion.div>
     </section>
   )
@@ -628,12 +843,10 @@ function Section4B() {
 function Section5({
   funnelStep,
   dataMetricsRevealed,
-  corePointRevealed,
   onAdvance,
 }: {
   funnelStep: number
   dataMetricsRevealed: boolean
-  corePointRevealed: boolean
   onAdvance: () => void
 }) {
   const ref = useRef(null)
@@ -666,213 +879,157 @@ function Section5({
         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onAdvance() } }}
         aria-label="点击翻页"
       >
-        <motion.div
-          variants={fadeInUp}
-          animate={{ y: corePointRevealed ? -16 : 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
-          className="flex flex-col items-center gap-4 md:gap-6 will-change-transform"
-        >
-        <motion.div variants={fadeInUp} className="flex items-center justify-center gap-2 md:gap-4 min-w-0">
-          {screens.map((s, i) => {
-            const isVisible = i <= funnelStep
-            return (
-              <motion.div
-                key={i}
-                initial={false}
-                animate={{ opacity: isVisible ? 1 : 0, visibility: isVisible ? "visible" : "hidden" }}
-                transition={{ duration: 0.3 }}
-                className="flex items-center shrink-0"
-                style={{ pointerEvents: isVisible ? "auto" : "none" }}
-              >
-                <div className="flex flex-col items-center">
-                  <p className="mb-2 text-sm md:text-base lg:text-lg text-slate-400 font-medium">{s.label}</p>
-                  <div className="h-[55cqh] md:h-[60cqh] aspect-[9/19] rounded-2xl md:rounded-3xl bg-[#111827] border border-white/5 overflow-hidden transition-all duration-300 hover:border-orange-400/30 hover:bg-white/8 relative">
-                    <div className="absolute top-2 left-1/2 -translate-x-1/2 w-8 md:w-10 h-1.5 bg-slate-700/50 rounded-full z-10" />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={s.src} alt={s.label} className="w-full h-full object-cover object-top" />
-                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 md:w-8 h-1 bg-slate-600/50 rounded-full z-10" />
+        <motion.div variants={fadeInUp} className="flex flex-col items-center gap-4 md:gap-6">
+          <motion.div variants={fadeInUp} className="flex min-w-0 items-center justify-center gap-2 md:gap-4">
+            {screens.map((s, i) => {
+              const isVisible = i <= funnelStep
+              return (
+                <motion.div
+                  key={i}
+                  initial={false}
+                  animate={{ opacity: isVisible ? 1 : 0, visibility: isVisible ? "visible" : "hidden" }}
+                  transition={{ duration: 0.3 }}
+                  className="flex shrink-0 items-center"
+                  style={{ pointerEvents: isVisible ? "auto" : "none" }}
+                >
+                  <div className="flex flex-col items-center">
+                    <p className="mb-2 text-sm font-medium text-slate-400 md:text-base lg:text-lg">{s.label}</p>
+                    <div className="relative aspect-[9/19] h-[55cqh] rounded-2xl border border-white/5 bg-[#111827] transition-all duration-300 hover:border-orange-400/30 hover:bg-white/8 md:h-[60cqh] md:rounded-3xl overflow-hidden">
+                      <div className="absolute top-2 left-1/2 z-10 h-1.5 w-8 -translate-x-1/2 rounded-full bg-slate-700/50 md:w-10" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={s.src} alt={s.label} className="h-full w-full object-cover object-top" />
+                      <div className="absolute bottom-2 left-1/2 z-10 h-1 w-6 -translate-x-1/2 rounded-full bg-slate-600/50 md:w-8" />
+                    </div>
                   </div>
-                </div>
-                {i < 3 && <span className={`text-slate-600 text-xl md:text-2xl mx-1 md:mx-2 z-10 ${i < funnelStep ? "" : "invisible"}`}>{">"}</span>}
-              </motion.div>
-            )
-          })}
-        </motion.div>
-        <div className="min-h-[4rem] flex items-center justify-center">
-          <motion.div
-            initial={false}
-            animate={{ opacity: dataMetricsRevealed ? 1 : 0 }}
-            transition={{ duration: 0.3 }}
-            className="w-full max-w-5xl flex flex-col md:flex-row items-center justify-center gap-8 md:gap-20 px-4"
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-lg md:text-2xl lg:text-3xl text-white">1️⃣→2️⃣ 新人券领取率：</span>
-              <span className="text-2xl md:text-3xl lg:text-4xl font-medium text-[#77fbd1]">43%</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-lg md:text-2xl lg:text-3xl text-white">1️⃣ →3️⃣ 查看游戏率：</span>
-              <span className="text-2xl md:text-3xl lg:text-4xl font-medium text-[#77fbd1]">76%</span>
-            </div>
+                  {i < 3 && <span className={`z-10 mx-1 text-xl text-slate-600 md:mx-2 md:text-2xl ${i < funnelStep ? "" : "invisible"}`}>{">"}</span>}
+                </motion.div>
+              )
+            })}
           </motion.div>
-        </div>
+          <div className="flex min-h-[4rem] items-center justify-center">
+            <motion.div
+              initial={false}
+              animate={{ opacity: dataMetricsRevealed ? 1 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex w-full max-w-5xl flex-col items-center justify-center gap-8 px-4 md:flex-row md:gap-20"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-lg text-white md:text-2xl lg:text-3xl">1️⃣→2️⃣ 新人券领取率：</span>
+                <span className="text-2xl font-medium text-[#77fbd1] md:text-3xl lg:text-4xl">43%</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-lg text-white md:text-2xl lg:text-3xl">1️⃣ →3️⃣ 查看游戏率：</span>
+                <span className="text-2xl font-medium text-[#77fbd1] md:text-3xl lg:text-4xl">76%</span>
+              </div>
+            </motion.div>
+          </div>
         </motion.div>
       </motion.div>
-      <AnimatePresence>
-        {corePointRevealed && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.4 }}
-            className="relative z-10 w-[95%] max-w-3xl -mt-8 md:-mt-12"
-          >
-            <div className="px-6 py-4 md:px-10 md:py-5 rounded-full bg-red-500/10 border-2 border-dashed border-red-500/40 backdrop-blur-sm text-center">
-              <p className="text-base md:text-2xl lg:text-3xl font-bold text-red-400">核心卡点：24% 买量用户未见游戏即流失！</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   )
 }
 
 // Section 6: 破局共识
-function Section6() {
+function Section6({
+  extraRevealed,
+  onExtraReveal,
+}: {
+  extraRevealed: boolean
+  onExtraReveal?: () => void
+}) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.3 })
 
   return (
-    <section className="relative h-full w-full snap-start flex items-center justify-center overflow-hidden px-6" style={{ backgroundColor: "#050B14" }}>
+    <section
+      className="relative h-full w-full snap-start flex items-center justify-center overflow-hidden px-6"
+      style={{
+        backgroundColor: "#050B14",
+        cursor: extraRevealed ? "default" : "pointer",
+      }}
+      onClick={() => {
+        if (!extraRevealed && onExtraReveal) onExtraReveal()
+      }}
+      role="presentation"
+    >
       {/* Deep sea wave gradient at bottom */}
       <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-[#1b2cf4]/22 via-[#1b2cf4]/08 to-transparent" />
       <SectionDesignNavBubbles />
 
-      {/* 左上角小字 */}
-      <p className="absolute top-6 left-6 md:top-8 md:left-8 z-10 text-base md:text-lg text-slate-500">结合数据结果，再次明确需求策略</p>
+      {/* 左上：与第 5 屏「设计思维的转变」同款结构 */}
+      <div className="pointer-events-none absolute left-6 top-6 z-20 md:left-8 md:top-8 lg:left-10 lg:top-10">
+        <div className="pointer-events-auto flex items-start gap-3 md:gap-3.5">
+          <span
+            className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#1b2cf4] md:mt-2.5 md:h-3 md:w-3"
+            aria-hidden
+          />
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-white md:text-3xl lg:text-4xl">
+              结合数据洞察，定义需求策略
+            </h2>
+            <p className="mt-1 text-sm font-medium text-slate-500 md:mt-1.5 md:text-base">Insight-led demand strategy</p>
+          </div>
+        </div>
+      </div>
 
       <motion.div
         ref={ref}
         variants={staggerContainer}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 w-full max-w-7xl flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10"
+        className="relative z-10 flex w-full max-w-7xl -translate-y-3 flex-col items-center justify-center gap-4 pt-20 md:-translate-y-5 md:flex-row md:gap-5 md:pt-24 lg:gap-6 lg:pt-[5.5rem]"
       >
-        {/* 左侧：3个独立模块，往右挪，框跟随文字长度，标签等宽左对齐，右侧留间距 */}
-        <motion.div variants={fadeInUp} className="w-full md:w-[45%] flex flex-col gap-4 md:gap-5 md:pl-12 lg:pl-16 items-start">
-          <div className="rounded-2xl md:rounded-3xl bg-[#111827] border border-white/5 pl-5 pr-6 md:pl-6 md:pr-8 py-5 md:py-6 inline-flex items-baseline gap-4 md:gap-6 w-fit">
-            <span className="text-slate-500 text-base md:text-lg w-[5.5rem] md:w-24 shrink-0">业务目标</span>
-            <span className="text-white text-lg md:text-xl lg:text-2xl font-medium">提高新用户下载转化率</span>
+        {/* 左侧：数据目标 / 原需求 / 数据卡点 / 新需求；相对右侧再略上移 */}
+        <motion.div
+          variants={fadeInUp}
+          className="flex w-full flex-col items-start gap-3 md:w-[48%] md:-translate-y-2 md:gap-4 md:pl-8 lg:-translate-y-3 lg:pl-12"
+        >
+          <div className="inline-flex w-fit max-w-full items-baseline gap-4 rounded-2xl border border-white/5 bg-[#111827] py-5 pl-5 pr-6 md:gap-6 md:rounded-3xl md:py-6 md:pl-6 md:pr-8">
+            <span className="w-[5.5rem] shrink-0 text-base text-slate-500 md:w-24 md:text-lg">数据目标</span>
+            <span className="text-lg font-medium text-white md:text-xl lg:text-2xl">提高新用户下载转化率</span>
           </div>
-          <div className="rounded-2xl md:rounded-3xl bg-[#111827] border border-white/5 pl-5 pr-6 md:pl-6 md:pr-8 py-5 md:py-6 inline-flex items-baseline gap-4 md:gap-6 w-fit">
-            <span className="text-slate-500 text-base md:text-lg w-[5.5rem] md:w-24 shrink-0">策略1</span>
-            <span className="text-white text-xl md:text-2xl lg:text-3xl font-medium whitespace-nowrap">新用户启动APP，直接<span className="text-[#77fbd1]">落地到游戏列表</span></span>
+          <div className="inline-flex max-w-full flex-nowrap items-baseline gap-4 whitespace-nowrap rounded-2xl border border-white/5 bg-[#111827] py-5 pl-5 pr-6 md:gap-6 md:rounded-3xl md:py-6 md:pl-6 md:pr-8">
+            <span className="w-20 shrink-0 text-base text-slate-500 md:w-24 md:text-lg">原需求</span>
+            <span className="shrink-0 text-lg font-medium text-white md:text-xl lg:text-2xl">
+              新人礼页引导用户去游戏专区
+            </span>
           </div>
-          <div className="rounded-2xl md:rounded-3xl bg-[#111827] border border-white/5 pl-5 pr-6 md:pl-6 md:pr-8 py-5 md:py-6 inline-flex items-baseline gap-4 md:gap-6 w-fit">
-            <span className="text-slate-500 text-base md:text-lg w-[5.5rem] md:w-24 shrink-0">策略2</span>
-            <span className="text-white text-xl md:text-2xl lg:text-3xl font-medium whitespace-nowrap">新人券以<span className="text-[#77fbd1]">弹窗</span>的形式直接曝光</span>
+          <div className="w-fit max-w-full overflow-hidden rounded-2xl border border-dashed border-red-400/45 bg-red-500/10 py-4 pl-5 pr-6 md:rounded-3xl md:py-5 md:pl-6 md:pr-8">
+            <p className="whitespace-nowrap text-lg font-medium leading-snug text-red-200 md:text-xl lg:text-2xl">
+              数据卡点：24%的用户没有浏览游戏就流失了
+            </p>
           </div>
+          <motion.div
+            initial={false}
+            animate={{ opacity: extraRevealed ? 1 : 0 }}
+            transition={{ duration: 0.35 }}
+            className={extraRevealed ? "pointer-events-auto" : "pointer-events-none"}
+          >
+            <div className="inline-flex max-w-full flex-nowrap items-baseline gap-4 whitespace-nowrap rounded-2xl border border-white/5 bg-[#111827] py-5 pl-5 pr-6 md:gap-6 md:rounded-3xl md:py-6 md:pl-6 md:pr-8">
+              <span className="w-20 shrink-0 text-base text-slate-500 md:w-24 md:text-lg">新需求</span>
+              <span className="shrink-0 text-lg font-medium text-white md:text-xl lg:text-2xl">
+                启动APP落地首页，显示新人券
+              </span>
+            </div>
+          </motion.div>
         </motion.div>
 
-        {/* 右侧：手机模型 加大 */}
-        <motion.div variants={fadeInUp} className="flex-shrink-0 w-full md:w-[55%] flex justify-center">
-          <div className="h-[65cqh] md:h-[75cqh] aspect-[9/19] rounded-2xl md:rounded-3xl bg-[#111827] border border-white/5 overflow-hidden relative">
-            <div className="absolute top-2 left-1/2 -translate-x-1/2 w-8 md:w-10 h-1.5 bg-slate-700/50 rounded-full z-10" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/image8.png" alt="策略展示" className="w-full h-full object-cover object-top" />
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 md:w-8 h-1 bg-slate-600/50 rounded-full z-10" />
-          </div>
+        {/* 右侧：与改版前相同 9:19 + 高度；仅外层淡入，避免比例被 w-full/max-w 拉变形 */}
+        <motion.div variants={fadeInUp} className="flex w-full shrink-0 justify-center md:w-[52%]">
+          <motion.div
+            initial={false}
+            animate={{ opacity: extraRevealed ? 1 : 0 }}
+            transition={{ duration: 0.35 }}
+            className={`mx-auto w-fit shrink-0 ${extraRevealed ? "pointer-events-auto" : "pointer-events-none"}`}
+          >
+            <div className="relative h-[65cqh] aspect-[9/19] overflow-hidden rounded-2xl border border-white/5 bg-[#111827] md:h-[75cqh] md:rounded-3xl">
+              <div className="absolute left-1/2 top-2 z-10 h-1.5 w-8 -translate-x-1/2 rounded-full bg-slate-700/50 md:w-10" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/image8.png" alt="需求示意" className="h-full w-full object-cover object-top" />
+              <div className="absolute bottom-2 left-1/2 z-10 h-1 w-6 -translate-x-1/2 rounded-full bg-slate-600/50 md:w-8" />
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </section>
-  )
-}
-
-// Section 7: 福格模型 - B = MAP 公式布局
-function Section7() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
-
-  return (
-    <section className="relative h-full w-full snap-start flex items-center justify-center overflow-hidden px-6" style={{ backgroundColor: "#050B14" }}>
-      {/* Background grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
-      <SectionDesignNavBubbles />
-
-      {/* 左上角小字 */}
-      <p className="absolute top-6 left-6 md:top-8 md:left-8 z-10 text-base md:text-lg text-slate-500">用设计体验细节，承接业务目标</p>
-
-      <motion.div
-        ref={ref}
-        variants={staggerContainer}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 flex flex-col items-center gap-10"
-      >
-        {/* Title - ENLARGED */}
-        <motion.h2 
-          variants={fadeInUp}
-          className="text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center"
-        >
-          结合Fogg模型 进行设计助推
-        </motion.h2>
-
-        {/* B = MAP Formula - ENLARGED */}
-        <motion.div 
-          variants={fadeInUp}
-          className="flex items-center gap-6 md:gap-10 lg:gap-12"
-        >
-          {/* B */}
-          <div className="flex flex-col items-center">
-            <span className="text-8xl md:text-9xl lg:text-[10rem] font-black text-slate-200">B</span>
-            <span className="text-white text-lg md:text-xl mt-3">行为</span>
-          </div>
-
-          {/* = */}
-          <div className="flex flex-col items-center">
-            <span className="text-6xl md:text-7xl lg:text-8xl font-bold text-slate-400">=</span>
-            <span className="text-slate-500 text-lg md:text-xl mt-3">发生</span>
-          </div>
-
-          {/* M */}
-          <div className="flex flex-col items-center">
-            <span className="text-8xl md:text-9xl lg:text-[10rem] font-black text-[#77fbd1]">M</span>
-            <span className="text-[#77fbd1] text-lg md:text-xl mt-3">动机</span>
-          </div>
-
-          {/* * */}
-          <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-500">*</span>
-
-          {/* A */}
-          <div className="flex flex-col items-center">
-            <span className="text-8xl md:text-9xl lg:text-[10rem] font-black text-orange-400">A</span>
-            <span className="text-orange-400 text-lg md:text-xl mt-3">能力</span>
-          </div>
-
-          {/* * */}
-          <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-500">*</span>
-
-          {/* P */}
-          <div className="flex flex-col items-center">
-            <span className="text-8xl md:text-9xl lg:text-[10rem] font-black text-[#77fbd1]">P</span>
-            <span className="text-[#77fbd1] text-lg md:text-xl mt-3">提示</span>
-          </div>
-        </motion.div>
-
-        {/* Bottom text */}
-        <motion.p 
-          variants={fadeInUp}
-          className="text-slate-400 text-lg md:text-xl tracking-wide mt-4"
-        >
-          同时出现的时候
-        </motion.p>
-
-        {/* Subtitle */}
-        <motion.p 
-          variants={fadeInUp}
-          className="text-slate-600 text-sm tracking-wide"
-        >
-          福格行为模型 Fogg Behavior Model
-        </motion.p>
       </motion.div>
     </section>
   )
@@ -884,9 +1041,9 @@ function Section7b({ step, onAdvance }: { step: number; onAdvance: () => void })
   const isInView = useInView(ref, { once: true, amount: 0.3 })
 
   const cards = [
-    { title: <><span className="text-[#77fbd1]">稀缺性</span><span className="text-white"> 增加动机</span></>, sub: "抽奖机、超过92%新人、低奖励轮播" },
-    { title: <><span className="text-[#77fbd1]">损失厌恶</span><span className="text-white"> 增加动机</span></>, sub: "倒计时、已放入账户、二次挽留弹窗" },
-    { title: <><span className="text-orange-400">增强引导</span><span className="text-white"> 增加提示</span></>, sub: "立即解锁、按钮动效" },
+    { title: <span className="text-[#77fbd1]">营造稀缺性</span>, sub: "抽奖机、超过92%新人、低奖励轮播" },
+    { title: <span className="text-[#77fbd1]">利用损失厌恶</span>, sub: "倒计时、已放入账户、二次挽留弹窗" },
+    { title: <span className="text-orange-400">加强动作提示</span>, sub: "立即解锁、按钮动效" },
   ]
 
   return (
@@ -917,15 +1074,18 @@ function Section7b({ step, onAdvance }: { step: number; onAdvance: () => void })
           </div>
         </motion.div>
 
-        {/* 右侧：3个模块，点击逐个展示，预留空间避免位移 */}
-        <motion.div variants={fadeInUp} className="flex flex-col gap-4 md:gap-5 md:pl-4 flex-1 min-w-0 min-h-[280px] md:min-h-[320px] justify-center">
+        {/* 右侧：3 张同宽卡片，占满右栏可加宽 */}
+        <motion.div
+          variants={fadeInUp}
+          className="flex min-h-[280px] w-full min-w-0 flex-1 flex-col justify-center gap-4 self-stretch md:min-h-[320px] md:gap-5 md:pl-5 lg:pl-6"
+        >
           {cards.map((card, i) => (
             <motion.div
               key={i}
               initial={false}
               animate={{ opacity: step > i ? 1 : 0 }}
               transition={{ duration: 0.3 }}
-              className="rounded-2xl md:rounded-3xl bg-[#111827] border border-white/5 pl-5 pr-6 md:pl-6 md:pr-8 py-5 md:py-6 w-fit"
+              className="w-full rounded-2xl border border-white/5 bg-[#111827] py-5 pl-5 pr-6 md:rounded-3xl md:py-6 md:pl-6 md:pr-8"
             >
               <p className="text-xl md:text-2xl lg:text-3xl font-medium">{card.title}</p>
               <p className="mt-2 text-sm md:text-base text-slate-400">{card.sub}</p>
@@ -955,7 +1115,7 @@ function Section8() {
         variants={staggerContainer}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 w-full max-w-7xl flex flex-col md:flex-row gap-10 items-center px-4"
+        className="relative z-10 flex w-full max-w-7xl flex-col items-center gap-4 px-3 md:flex-row md:gap-5 md:px-4 lg:gap-6"
       >
         {/* Left side - 2 phone placeholders (70%) - 放大 */}
         <motion.div variants={fadeInUp} className="w-full md:w-[70%] flex items-center justify-center gap-6 md:gap-10">
@@ -990,33 +1150,321 @@ function Section8() {
           </div>
         </motion.div>
 
-        {/* Right side - Big numbers (30%) - ENLARGED */}
-        <div className="w-full md:w-[30%] flex flex-col gap-10 items-center justify-center">
+        {/* Right side - Big numbers（整体再略左移） */}
+        <div className="flex w-full flex-col items-stretch justify-center gap-8 md:w-[30%] md:-translate-x-4 md:gap-10 lg:-translate-x-7 xl:-translate-x-8">
           {/* Metric 1 */}
-          <motion.div variants={fadeInUp} className="text-center">
-            <p className="text-slate-500 text-base uppercase tracking-widest mb-3">新人券领取率</p>
-            <div className="flex flex-col items-center gap-3">
-              <span className="text-3xl md:text-4xl text-slate-500 font-light">42.75%</span>
-              <svg className="w-8 h-8 text-orange-400 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <motion.div variants={fadeInUp} className="w-full text-right">
+            <p className="mb-3 text-lg font-medium uppercase tracking-widest text-slate-500 md:text-xl lg:text-2xl">
+              新人券领取率
+            </p>
+            <div className="flex flex-row flex-nowrap items-center justify-end gap-2 md:gap-4">
+              <span className="shrink-0 text-3xl font-light text-slate-500 md:text-4xl">42.75%</span>
+              <svg
+                className="h-6 w-6 shrink-0 text-orange-400 md:h-8 md:w-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
-              <span className="text-5xl md:text-7xl font-bold text-[#77fbd1]">56%</span>
+              <span className="shrink-0 text-5xl font-bold text-[#77fbd1] md:text-7xl">56%</span>
             </div>
           </motion.div>
 
           {/* Metric 2 */}
-          <motion.div variants={fadeInUp} className="text-center">
-            <p className="text-slate-500 text-base uppercase tracking-widest mb-3">下载转化率</p>
-            <div className="flex flex-col items-center gap-3">
-              <span className="text-3xl md:text-4xl text-slate-500 font-light">45%</span>
-              <svg className="w-8 h-8 text-orange-400 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <motion.div variants={fadeInUp} className="w-full text-right">
+            <p className="mb-3 text-lg font-medium uppercase tracking-widest text-slate-500 md:text-xl lg:text-2xl">
+              下载转化率
+            </p>
+            <div className="flex flex-row flex-nowrap items-center justify-end gap-2 md:gap-4">
+              <span className="shrink-0 text-3xl font-light text-slate-500 md:text-4xl">45%</span>
+              <svg
+                className="h-6 w-6 shrink-0 text-orange-400 md:h-8 md:w-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
-              <span className="text-5xl md:text-7xl font-bold text-[#77fbd1]">48%</span>
+              <span className="shrink-0 text-5xl font-bold text-[#77fbd1] md:text-7xl">48%</span>
             </div>
           </motion.div>
         </div>
       </motion.div>
+    </section>
+  )
+}
+
+/** 大包体下载 × 设计心理（第 14 屏）：双卡先显、下载完成率角标再显（均为 opacity，无位移） */
+function SectionBigDownloadWait({
+  bottomCardsRevealed,
+  completionRateRevealed,
+}: {
+  bottomCardsRevealed: boolean
+  completionRateRevealed: boolean
+}) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.25 })
+  const accent = "#76FCD0"
+  const cardOpacity = isInView && bottomCardsRevealed ? 1 : 0
+  const rateOpacity = isInView && completionRateRevealed ? 1 : 0
+
+  const cardShell =
+    "flex min-h-0 flex-col rounded-2xl border border-white/10 bg-[#0d1219] p-4 shadow-xl shadow-black/40 md:rounded-3xl md:p-5 lg:p-6"
+
+  return (
+    <section className="relative flex h-full w-full snap-start flex-col overflow-hidden" style={{ backgroundColor: "#000000" }}>
+      <Section3Ambient />
+
+      {/* 左上：与第 5 屏同款蓝点 + 主标题（非居中） */}
+      <div className="pointer-events-none absolute left-8 top-8 z-20 md:left-14 md:top-10 lg:left-16">
+        <div className="pointer-events-auto flex max-w-[min(calc(100vw-4rem),48rem)] items-start gap-3 md:gap-3.5 lg:max-w-[52rem]">
+          <span
+            className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#1b2cf4] md:mt-2.5 md:h-3 md:w-3"
+            aria-hidden
+          />
+          <div>
+            <h2 className="text-xl font-bold leading-snug tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl">
+              大包体下载破局，用<span style={{ color: accent }}>设计心理学</span>重塑等待体验
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <div
+        ref={ref}
+        className="relative z-10 flex min-h-0 flex-1 flex-col px-5 pb-8 pt-[6.25rem] md:px-10 md:pb-10 md:pt-[7rem] lg:px-16 lg:pt-[7.5rem]"
+      >
+        {/* 下载完成率：右侧、略低；默认透明占位，避免显隐位移 */}
+        <motion.div
+          initial={false}
+          animate={{ opacity: rateOpacity }}
+          transition={{ duration: 0.35 }}
+          className="pointer-events-none absolute right-5 top-[10rem] z-30 w-[min(calc(100%-2.5rem),17rem)] md:right-8 md:top-[11.25rem] md:w-[19.5rem] lg:right-12 lg:top-[12rem] lg:w-[21rem]"
+          aria-hidden
+        >
+          <div className="rounded-xl border border-white/15 bg-[#1b2cf4] px-4 py-3.5 shadow-xl shadow-black/40 md:rounded-2xl md:px-6 md:py-5">
+            <p className="text-base font-bold tracking-wide text-white md:text-lg lg:text-xl">下载完成率</p>
+            <p className="mt-2 text-xl font-bold tabular-nums leading-tight text-white md:mt-2.5 md:text-3xl lg:text-4xl">
+              从65% → <span style={{ color: accent }}>82%</span>
+            </p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="flex min-h-0 flex-1 flex-col justify-center"
+        >
+          {/* 双卡：仅两张卡占网格，顶对齐 + 同排，避免与角标混排错位 */}
+          <div className="mx-auto grid min-h-0 w-full max-w-[min(100%,58rem)] flex-1 grid-cols-1 gap-4 md:max-w-[min(100%,68rem)] md:grid-cols-12 md:grid-rows-1 md:items-stretch md:gap-5 lg:max-w-[min(100%,72rem)] lg:gap-7">
+            <motion.div
+              initial={false}
+              animate={{ opacity: cardOpacity }}
+              transition={{ duration: 0.35 }}
+              className={`${cardShell} min-h-0 md:col-span-5 md:row-start-1 md:self-stretch ${bottomCardsRevealed ? "" : "pointer-events-none"}`}
+            >
+              <h3 className="mb-3 shrink-0 text-left text-base font-semibold leading-snug text-white md:mb-4 md:text-xl lg:text-2xl">
+                ① 入场即得，增加<span className="text-red-400">「损失厌恶」</span>
+              </h3>
+              <div className="flex min-h-0 flex-1 items-center justify-center px-1 pb-1 pt-0 md:px-2 md:pb-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/big-download-card1.png"
+                  alt="天降福利弹窗"
+                  className="h-[min(60cqh,calc(100dvh-15rem))] w-auto max-w-full object-contain object-top md:h-[min(62cqh,calc(100dvh-14.5rem))]"
+                />
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={false}
+              animate={{ opacity: cardOpacity }}
+              transition={{ duration: 0.35 }}
+              className={`${cardShell} min-h-0 md:col-span-7 md:row-start-1 md:self-stretch ${bottomCardsRevealed ? "" : "pointer-events-none"}`}
+            >
+              <h3 className="mb-3 shrink-0 text-left text-base font-semibold leading-snug text-white md:mb-4 md:text-xl lg:text-2xl">
+                ② 先松后紧，利用<span style={{ color: accent }}>「沉没成本」</span>
+              </h3>
+              <div className="flex min-h-0 flex-1 items-center justify-center px-1 pb-1 pt-0 md:px-2 md:pb-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/big-download-card2.png"
+                  alt="下载进度与优惠券"
+                  className="h-auto w-full max-h-[min(56cqh,calc(100dvh-15rem))] max-w-full object-contain object-center md:max-h-[min(62cqh,calc(100dvh-14.5rem))]"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+/** 福利 Tab 改版（第 15 屏）：revealPhase 0 右卡占位透明 →1 显右卡 →2 显全屏居中蓝条 */
+function SectionWelfareTabRevision({ revealPhase }: { revealPhase: 0 | 1 | 2 }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.22 })
+  const mint = "#76FCD0"
+
+  const points = [
+    {
+      num: "①",
+      title: "我的游戏福利，聚焦用户资产",
+      tags: ["高频功能", "便捷领取"],
+    },
+    {
+      num: "②",
+      title: "针对白嫖用户，促活跃的补贴活动",
+      tags: ["每日必领", "突出签到、畅玩卡"],
+    },
+    {
+      num: "③",
+      title: "针对大R用户，大充值补贴活动",
+      tags: ["充值必选", "外置福利信息"],
+    },
+  ]
+
+  const tagClass =
+    "rounded-md border border-[#76fcd0]/50 bg-[#76fcd0]/10 px-3 py-1.5 text-base font-medium text-white/95 md:px-3.5 md:py-2 md:text-lg"
+
+  const welfareCardFrame =
+    "flex min-h-0 rounded-3xl border border-white/10 bg-[#121923] p-4 shadow-xl shadow-black/40 md:p-5 lg:rounded-[1.75rem] lg:p-5"
+
+  const rightContentVisible = revealPhase >= 1
+  const statsOverlayVisible = revealPhase >= 2
+
+  return (
+    <section className="relative flex h-full w-full snap-start flex-col overflow-hidden" style={{ backgroundColor: "#000000" }}>
+      <Section3Ambient />
+
+      <div className="pointer-events-none absolute bottom-7 left-8 z-20 text-xs font-light tracking-wider text-slate-500 md:bottom-8 md:left-10 md:text-sm">
+        4399UED
+      </div>
+
+      <div className="pointer-events-none absolute left-8 top-8 z-20 md:left-14 md:top-10 lg:left-16">
+        <div className="pointer-events-auto flex max-w-[min(calc(100vw-4rem),52rem)] items-start gap-3 md:gap-3.5 lg:max-w-[56rem]">
+          <span
+            className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#1b2cf4] md:mt-2.5 md:h-3 md:w-3"
+            aria-hidden
+          />
+          <div>
+            <h2 className="text-xl font-bold leading-snug tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl">
+              福利Tab改版：从堆砌功能到<span style={{ color: mint }}>按人群分发</span>
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <div
+        ref={ref}
+        className="relative z-10 flex min-h-0 flex-1 flex-col justify-center px-5 pb-9 pt-[6.5rem] md:px-10 md:pb-10 md:pt-[7.25rem] lg:justify-stretch lg:px-12 lg:pb-8 lg:pt-[7.5rem] xl:px-14"
+      >
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="mx-auto flex min-h-0 w-full max-w-[min(100%,70rem)] flex-1 flex-col items-stretch gap-4 md:max-w-[min(100%,74rem)] lg:h-[min(66cqh,calc(100dvh-9.25rem))] lg:max-h-[min(70cqh,calc(100dvh-8.75rem))] lg:flex-row lg:items-stretch lg:gap-5 xl:max-w-[min(100%,76rem)]"
+        >
+          {/* 左卡：仅左图 */}
+          <motion.div
+            variants={fadeInUp}
+            className={`${welfareCardFrame} w-full items-center justify-center lg:w-[min(36%,21rem)] lg:max-w-[22rem] lg:flex-none lg:overflow-hidden`}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/welfare-tab-figure1.png"
+              alt="福利页活动与领券模块示意"
+              className="h-auto max-h-[min(48cqh,calc(100dvh-15rem))] w-full object-contain object-top lg:block lg:h-full lg:max-h-full lg:w-auto lg:max-w-full lg:object-contain lg:object-top"
+            />
+          </motion.div>
+
+          {/* 右卡：不占位变化，整块 opacity 揭示（不用子 stagger，避免先空壳再填内容） */}
+          <motion.div
+            initial={false}
+            animate={{ opacity: isInView && rightContentVisible ? 1 : 0 }}
+            transition={{ duration: 0.35 }}
+            className={`${welfareCardFrame} relative min-h-0 flex-1 flex-col overflow-visible lg:h-full lg:min-h-0 lg:flex-row lg:items-stretch`}
+            aria-hidden={!rightContentVisible}
+          >
+            <div className="flex min-h-0 w-full flex-1 flex-col gap-5 lg:flex-row lg:items-stretch lg:gap-5">
+              {/* 右图列加宽 + 以高度为约束等比放大（勿用 lg:w-full 否则先被宽度压扁） */}
+              <div className="flex min-h-0 w-full shrink-0 items-center justify-center border-b border-white/5 pb-4 lg:h-full lg:w-[min(58%,28rem)] lg:max-w-[30rem] lg:flex-none lg:self-stretch lg:border-b-0 lg:pb-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/welfare-tab-right-figure1.png"
+                  alt="福利 Tab 分人群模块示意（图1）"
+                  className="h-auto max-h-[min(48cqh,calc(100dvh-15rem))] w-full object-contain object-top lg:block lg:h-full lg:max-h-full lg:w-auto lg:max-w-full lg:object-contain lg:object-top"
+                />
+              </div>
+
+              <div className="relative flex min-h-0 min-w-0 flex-1 flex-col gap-6 pt-6 lg:min-h-0 lg:flex-1 lg:justify-start lg:gap-7 lg:pt-10 lg:pl-2 xl:pt-12">
+                {points.slice(0, 2).map((p, i) => (
+                  <div
+                    key={p.title}
+                    className={`flex shrink-0 flex-col gap-2.5 md:gap-3 ${i === 1 ? "mt-4 lg:mt-6" : ""}`}
+                  >
+                    <p className="text-left text-base font-bold leading-snug text-white md:text-lg lg:text-xl">
+                      <span style={{ color: mint }}>{p.num}</span> {p.title}
+                    </p>
+                    <div className="flex flex-wrap gap-2 md:gap-2.5">
+                      {p.tags.map((t) => (
+                        <span key={t} className={tagClass}>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+
+                {points.slice(2).map((p) => (
+                  <div
+                    key={p.title}
+                    className="mt-10 flex shrink-0 flex-col gap-2.5 md:mt-12 md:gap-3 lg:mt-14"
+                  >
+                    <p className="text-left text-base font-bold leading-snug text-white md:text-lg lg:text-xl">
+                      <span style={{ color: mint }}>{p.num}</span> {p.title}
+                    </p>
+                    <div className="flex flex-wrap gap-2 md:gap-2.5">
+                      {p.tags.map((t) => (
+                        <span key={t} className={tagClass}>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 蓝条：相对右侧模块卡片水平+垂直居中；宽度为原先上限的约 70% */}
+            <motion.div
+              initial={false}
+              animate={{ opacity: statsOverlayVisible ? 1 : 0 }}
+              transition={{ duration: 0.35 }}
+              className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-3 md:px-4"
+              aria-hidden={!statsOverlayVisible}
+            >
+              <div className="w-full max-w-[min(65.8vw,30.8rem)] rounded-2xl border border-white/15 bg-[#1b2cf4] px-5 py-5 text-center shadow-2xl shadow-black/50 md:max-w-[min(64.4vw,33.6rem)] md:rounded-3xl md:px-8 md:py-7 lg:max-w-[min(63vw,36.4rem)] lg:px-10 lg:py-8">
+                <p className="text-center text-xl font-bold tabular-nums leading-snug text-white md:text-2xl lg:text-3xl xl:text-[2rem]">
+                  页面渗透率 <span className="text-white">24%</span>{" "}
+                  <span className="text-white/85">→</span>{" "}
+                  <span style={{ color: mint }}>25.3%</span>
+                </p>
+                <p className="mt-3 text-center text-xl font-bold tabular-nums leading-snug text-white md:mt-4 md:text-2xl lg:text-3xl lg:mt-5 xl:text-[2rem]">
+                  当日留存 <span className="text-white">72%</span>{" "}
+                  <span className="text-white/85">→</span>{" "}
+                  <span style={{ color: mint }}>77.8%</span>
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </div>
     </section>
   )
 }
@@ -1113,66 +1561,110 @@ function Section9({ step, onAdvance }: { step: number; onAdvance: () => void }) 
   )
 }
 
-// Section 10: 总结卡片 (Bento Box) - page13
-function Section10() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
-  const [hasBeenVisible, setHasBeenVisible] = useState(false)
-  useEffect(() => {
-    if (isInView) setHasBeenVisible(true)
-  }, [isInView])
-
-  const summaryCards = [
-    { title: "更广" },
-    { title: "更细腻" },
-    { title: "更高效" },
-  ]
-
-  return (
-    <section className="relative h-full w-full snap-start flex flex-col items-center justify-center overflow-hidden px-6" style={{ backgroundColor: "#050B14" }}>
-      <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-[#1b2cf4]/22 via-[#1b2cf4]/08 to-transparent" />
-      <SectionDesignNavBubbles />
-
-      <motion.div
-        ref={ref}
-        variants={staggerContainer}
-        initial="hidden"
-        animate={hasBeenVisible ? "visible" : "hidden"}
-        className="relative z-10 w-full max-w-6xl px-4 flex flex-col items-center gap-8 md:gap-10"
-      >
-        {/* 页面上方大字 */}
-        <motion.h2 variants={fadeInUp} className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white text-center">
-          以数据增长为驱动，以用户为中心
-        </motion.h2>
-
-        {/* Bento Grid - 3 equal cards 高度降低 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {summaryCards.map((card, index) => (
-            <motion.div
-              key={index}
-              variants={fadeInUp}
-              initial={false}
-              className="aspect-[4/3] max-h-[220px] md:max-h-[260px] p-6 md:p-8 rounded-3xl bg-[#111827] border border-white/5 flex flex-col items-center justify-center transition-all duration-500 hover:border-white/25 hover:bg-white/8"
-            >
-              <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#77fbd1]">{card.title}</h3>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-    </section>
-  )
-}
-
 // Section 10b：第二章节过渡页 — 布局同 page22 规范（原独立 page3 样式，已与 page3 / page22 统一）
 function Section10b() {
   return (
     <ChapterTransitionLayout
       watermarkDigit="02"
       chapterLabel="Chapter 02"
-      title="02 AI提效"
+      title="02 AI赋能"
       subtitle="以AI赋能设计"
       activeModule={2}
     />
+  )
+}
+
+/** 第 31 屏：带新人三列卡片（文案、布局与参考稿一致） */
+function SectionLeadNewcomersThreeCards() {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.22 })
+  const mint = "#76FCD0"
+
+  const columns = [
+    {
+      emoji: "🎯",
+      title: "懂目标",
+      tags: ["挖掘需求表象", "拆解功能场景"],
+    },
+    {
+      emoji: "🔍",
+      title: "磨细节",
+      tags: ["推演全流程卡点", "层级及文案推敲", "评审UI稿"],
+    },
+    {
+      emoji: "🦾",
+      title: "促协作",
+      tags: ["规范交互说明", "规范协作流程"],
+    },
+  ] as const
+
+  const tagClass =
+    "rounded-md border border-dashed border-white/35 bg-black/20 px-3 py-2.5 text-center text-base font-medium leading-snug md:px-4 md:py-3 md:text-lg lg:text-xl"
+
+  return (
+    <section
+      className="relative flex h-full w-full snap-start flex-col overflow-x-hidden overflow-y-visible"
+      style={{ backgroundColor: "#000000" }}
+    >
+      <Section3Ambient />
+
+      <div className="pointer-events-none absolute bottom-7 left-8 z-20 text-xs font-light tracking-wider text-slate-500 md:bottom-8 md:left-10 md:text-sm">
+        4399UED
+      </div>
+
+      <div className="pointer-events-none absolute left-8 top-8 z-20 md:left-14 md:top-10 lg:left-16">
+        <div className="pointer-events-auto flex max-w-[min(calc(100vw-4rem),52rem)] items-start gap-3 md:gap-3.5 lg:max-w-[56rem]">
+          <span
+            className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#1b2cf4] md:mt-2.5 md:h-3 md:w-3"
+            aria-hidden
+          />
+          <div>
+            <h2 className="text-xl font-bold leading-snug tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl">
+              带新人：做引导者，而非答案提供者
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <div
+        ref={ref}
+        className="relative z-10 flex min-h-0 flex-1 flex-col justify-center overflow-visible px-5 pb-10 pt-[6.5rem] md:px-10 md:pb-12 md:pt-[7.25rem] lg:px-12 lg:pt-[7.5rem] xl:px-14"
+      >
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="mx-auto grid w-full max-w-[min(100%,70rem)] grid-cols-1 items-stretch gap-8 overflow-visible pt-10 sm:max-w-[min(100%,72rem)] sm:pt-12 md:grid-cols-3 md:gap-7 md:pt-14 lg:max-w-[min(100%,76rem)] lg:gap-8 lg:pt-16 xl:gap-10"
+        >
+          {columns.map((col) => (
+            <motion.div
+              key={col.title}
+              variants={fadeInUp}
+              className={`relative flex min-h-0 flex-col items-center overflow-visible rounded-3xl ${section3CircleFillGradient} px-5 pb-8 pt-16 text-center shadow-xl shadow-black/40 md:px-7 md:pb-10 md:pt-20 lg:rounded-[1.75rem] lg:px-8 lg:pb-11 lg:pt-24`}
+            >
+              <span
+                className="pointer-events-none absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-[46%] select-none text-[4.5rem] leading-none sm:text-7xl md:text-8xl md:-translate-y-[48%] lg:text-9xl lg:-translate-y-[50%]"
+                aria-hidden
+              >
+                {col.emoji}
+              </span>
+              <div className="relative z-10 flex w-full flex-col items-center">
+                <h3 className="mt-1 text-3xl font-bold leading-tight text-white md:mt-2 md:text-4xl lg:mt-3 lg:text-5xl">
+                  {col.title}
+                </h3>
+                <div className="mx-auto mt-6 flex w-full max-w-[12.5rem] flex-col gap-3 md:mt-7 md:max-w-[13.5rem] md:gap-3.5 lg:mt-8 lg:max-w-[14rem] lg:gap-4">
+                  {col.tags.map((t) => (
+                    <span key={t} className={`${tagClass} w-full`} style={{ color: mint }}>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
   )
 }
 
@@ -1330,17 +1822,16 @@ function Section14() {
         animate={isInView ? "visible" : "hidden"}
         className="relative z-10 w-full max-w-6xl flex flex-col gap-6 mt-0 md:mt-1"
       >
-        {/* Title（与 page16 同一位置） */}
-        <motion.h2 
+        <motion.h2
           variants={fadeInUp}
           className="text-2xl md:text-3xl lg:text-4xl font-bold text-white"
         >
           AI 快速生成可交互 Demo
         </motion.h2>
 
-        {/* 单图铺满 */}
         <motion.div variants={fadeInUp} className="w-full">
           <div className="relative w-full overflow-hidden rounded-2xl border border-white/5 bg-[#111827] md:rounded-3xl h-[min(72cqh,calc(100cqh-11rem))] min-h-[280px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/image13.png"
               alt="AI 快速生成可交互 Demo"
@@ -2051,8 +2542,10 @@ function Section22() {
           <div className="grid grid-cols-3 gap-3 md:gap-4 lg:gap-5">
             {items.slice(0, 3).map((item, i) => (
               <div key={i} className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111827]">
-                <div className="shrink-0 px-4 py-3 md:px-5 md:py-3.5">
-                  <p className="line-clamp-2 text-sm font-semibold leading-snug text-white md:text-base">{item.title}</p>
+                <div className="shrink-0 px-4 py-3 md:px-5 md:py-4">
+                  <p className="line-clamp-2 text-base font-semibold leading-snug text-white md:text-lg lg:text-xl">
+                    {item.title}
+                  </p>
                 </div>
                 {/* 16:9 图片区 */}
                 <div className="relative w-full overflow-hidden border-t border-white/5" style={{ paddingBottom: "56.25%" }}>
@@ -2066,8 +2559,10 @@ function Section22() {
           <div className="flex justify-center gap-3 md:gap-4 lg:gap-5">
             {items.slice(3).map((item, i) => (
               <div key={i} className="flex w-1/3 min-w-0 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111827]">
-                <div className="shrink-0 px-4 py-3 md:px-5 md:py-3.5">
-                  <p className="line-clamp-1 text-sm font-semibold leading-snug text-white md:text-base">{item.title}</p>
+                <div className="shrink-0 px-4 py-3 md:px-5 md:py-4">
+                  <p className="line-clamp-1 text-base font-semibold leading-snug text-white md:text-lg lg:text-xl">
+                    {item.title}
+                  </p>
                 </div>
                 {/* 16:9 图片区 */}
                 <div className="relative w-full overflow-hidden border-t border-white/5" style={{ paddingBottom: "56.25%" }}>
@@ -2307,43 +2802,74 @@ function Section25() {
   )
 }
 
-/** 双圆页在全部 section 中的索引（0-based）：S1,S2,章节01,本页 */
-const SECTION3_DUAL_CIRCLES_INDEX = 3
-/** Section4 需求内容页索引 */
-const SECTION4_INDEX = 4
-/** Section5 数据漏斗页索引（新增 Section4B 后为 6） */
-const SECTION5_INDEX = 6
-/** Section7b 设计体验细节页索引 */
-const SECTION7B_INDEX = 9
+/** Section3 设计思维转变页索引（第 5 屏，0-based） */
+const SECTION3_INDEX = 4
+/** Section4 业务需求页索引 */
+const SECTION4_INDEX = 6
+/** Section5 数据漏斗页索引（新增 Section4B 后为 8） */
+const SECTION5_INDEX = 8
+/** Section6 破局共识页索引 */
+const SECTION6_INDEX = 9
+/** Section7b 设计体验细节页索引（去掉原 Section7 福格页后前移 1） */
+const SECTION7B_INDEX = 10
+/** 第二段 TARGET/STEP 页索引（第 13 屏，STEP 02 默认隐藏） */
+const SECTION_DUP_TARGET_EXECUTE_INDEX = 12
+/** 大包体下载等待页索引（第 14 屏，底部双卡默认隐藏） */
+const SECTION_BIG_DOWNLOAD_WAIT_INDEX = 13
+/** 福利 Tab 改版页索引（第 15 屏） */
+const SECTION_WELFARE_TAB_INDEX = 14
 /** Section9 经验提炼页索引 */
-const SECTION9_INDEX = 11
-/** Section12 定制 GEM 管家页索引（page15） */
-const SECTION12_INDEX = 14
-/** SectionAIGameCopy 游戏化文案页索引（page19） */
-const SECTION_AIGAME_COPY_INDEX = 18
-/** Section16 AI复盘页索引（page20） */
-const SECTION16_INDEX = 19
-/** Section17 番茄待办页索引（page21） */
-const SECTION17_INDEX = 20
-/** Section19 标准化基建页索引（page24） */
-const SECTION19_INDEX = 23
-/** Section20 三举措页索引（page25） */
-const SECTION20_INDEX = 24
-/** Section21 带新人心法页索引（page26） */
-const SECTION21_INDEX = 25
-/** Section22 知识输出页索引（page27） */
-const SECTION22_INDEX = 26
-/** Section23 角色定义页索引（page29） */
-const SECTION23_INDEX = 28
+const SECTION9_INDEX = 15
+/** 与第 13 屏同结构与动画（第 17 屏，STEP 02 独立显隐） */
+const SECTION_DUP_TARGET_EXECUTE_SLIDE17_INDEX = 16
+/** Section12 定制 GEM 管家页索引（已移除原 Section10） */
+const SECTION12_INDEX = 18
+/** SectionAIGameCopy 游戏化文案页索引 */
+const SECTION_AIGAME_COPY_INDEX = 22
+/** Section16 AI复盘页索引 */
+const SECTION16_INDEX = 23
+/** Section17 番茄待办页索引 */
+const SECTION17_INDEX = 24
+/** Section19 标准化基建页索引 */
+const SECTION19_INDEX = 27
+/** Section20 三举措页索引 */
+const SECTION20_INDEX = 28
+/** Section21 带新人心法页索引 */
+const SECTION21_INDEX = 29
+/** Section22 知识输出页索引（第 32 屏） */
+const SECTION22_INDEX = 31
+/** 带新人三卡片（第 31 屏） */
+const SECTION_LEAD_NEWCOMERS_INDEX = 30
+/** Section23 角色定义页索引 */
+const SECTION23_INDEX = 33
+
+/** 右侧页码定位器：章节锚点（0-based），悬停展开小图预览与章名 */
+const PAGER_CHAPTER_MARKERS: { index: number; label: string; preview: string }[] = [
+  { index: 3, label: "01 专业能力", preview: "/image4.png" },
+  { index: 17, label: "02 AI赋能", preview: "/image20.png" },
+  { index: 25, label: "03 团队建设", preview: "/image28.png" },
+  { index: 31, label: "04 未来计划", preview: "/image25.png" },
+]
 
 export default function PromotionPresentation() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [currentSection, setCurrentSection] = useState(0)
-  const [section3InsightRevealed, setSection3InsightRevealed] = useState(false)
+  /** 第 5 屏：底部结论条，翻页器同页再点或空格后显示 */
+  const [section3FooterRevealed, setSection3FooterRevealed] = useState(false)
   const [section4DemandExtra, setSection4DemandExtra] = useState(false)
+  /** 第 10 屏：新需求 + 右侧示意，翻页器/空格后显示 */
+  const [section6ExtraRevealed, setSection6ExtraRevealed] = useState(false)
+  /** 第 13 屏（第二段 TARGET/STEP）：STEP 02 默认隐藏，翻页器/空格后再显示 */
+  const [dupTargetStep2Revealed, setDupTargetStep2Revealed] = useState(false)
+  /** 第 17 屏：与第 13 屏同页，STEP 02 显隐独立 */
+  const [dupTargetSlide17Step2Revealed, setDupTargetSlide17Step2Revealed] = useState(false)
+  /** 第 14 屏：底部双卡先显，「下载完成率」再显（均无位移） */
+  const [bigDownloadCardsRevealed, setBigDownloadCardsRevealed] = useState(false)
+  const [bigDownloadRateRevealed, setBigDownloadRateRevealed] = useState(false)
+  /** 第 15 屏：0 右卡内容隐藏 →1 翻页显右卡 →2 再显蓝条 */
+  const [welfareTabRevealPhase, setWelfareTabRevealPhase] = useState<0 | 1 | 2>(0)
   const [section5FunnelStep, setSection5FunnelStep] = useState(0)
   const [section5DataMetricsRevealed, setSection5DataMetricsRevealed] = useState(false)
-  const [section5CorePointRevealed, setSection5CorePointRevealed] = useState(false)
   const [section7bStep, setSection7bStep] = useState(0)
   const [section9Step, setSection9Step] = useState(0)
   const [section17InsightRevealed, setSection17InsightRevealed] = useState(false)
@@ -2362,36 +2888,20 @@ export default function PromotionPresentation() {
   const [section23MindsetRevealed, setSection23MindsetRevealed] = useState(false)
   /** page26：对比模块 0=无，1~3=逐条显示 */
   const [section21ComparisonStep, setSection21ComparisonStep] = useState(0)
-  const totalSections = 31
+  const totalSections = 36
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [stageScale, setStageScale] = useState(() =>
-    typeof window !== "undefined"
-      ? Math.min(window.innerWidth / 1440, window.innerHeight / 810)
-      : 1
-  )
 
   useEffect(() => {
-    const updateScale = () =>
-      setStageScale(Math.min(window.innerWidth / 1440, window.innerHeight / 810))
     const syncFullscreen = () => setIsFullscreen(Boolean(document.fullscreenElement))
-    const onFullscreenChange = () => {
-      syncFullscreen()
-      updateScale()
-    }
     syncFullscreen()
-    updateScale()
-    window.addEventListener("resize", updateScale)
-    document.addEventListener("fullscreenchange", onFullscreenChange)
-    return () => {
-      window.removeEventListener("resize", updateScale)
-      document.removeEventListener("fullscreenchange", onFullscreenChange)
-    }
+    document.addEventListener("fullscreenchange", syncFullscreen)
+    return () => document.removeEventListener("fullscreenchange", syncFullscreen)
   }, [])
 
-  // 离开双圆页后重置「第二步」，下次进入仍从仅双圆开始
+  // 离开第 5 屏后重置底部结论条
   useEffect(() => {
-    if (currentSection !== SECTION3_DUAL_CIRCLES_INDEX) {
-      setSection3InsightRevealed(false)
+    if (currentSection !== SECTION3_INDEX) {
+      setSection3FooterRevealed(false)
     }
   }, [currentSection])
 
@@ -2402,12 +2912,47 @@ export default function PromotionPresentation() {
     }
   }, [currentSection])
 
+  // 离开 Section6 后重置新需求 + 右侧示意
+  useEffect(() => {
+    if (currentSection !== SECTION6_INDEX) {
+      setSection6ExtraRevealed(false)
+    }
+  }, [currentSection])
+
+  // 离开第 13 屏（第二段 TARGET/STEP）后重置 STEP 02 显隐
+  useEffect(() => {
+    if (currentSection !== SECTION_DUP_TARGET_EXECUTE_INDEX) {
+      setDupTargetStep2Revealed(false)
+    }
+  }, [currentSection])
+
+  // 离开第 17 屏（第二段 TARGET/STEP 副本）后重置 STEP 02 显隐
+  useEffect(() => {
+    if (currentSection !== SECTION_DUP_TARGET_EXECUTE_SLIDE17_INDEX) {
+      setDupTargetSlide17Step2Revealed(false)
+    }
+  }, [currentSection])
+
+  // 离开第 14 屏后重置底部双卡与下载完成率显隐
+  useEffect(() => {
+    if (currentSection !== SECTION_BIG_DOWNLOAD_WAIT_INDEX) {
+      setBigDownloadCardsRevealed(false)
+      setBigDownloadRateRevealed(false)
+    }
+  }, [currentSection])
+
+  // 离开第 15 屏后重置揭示阶段
+  useEffect(() => {
+    if (currentSection !== SECTION_WELFARE_TAB_INDEX) {
+      setWelfareTabRevealPhase(0)
+    }
+  }, [currentSection])
+
   // 离开 Section5 后重置
   useEffect(() => {
     if (currentSection !== SECTION5_INDEX) {
       setSection5FunnelStep(0)
       setSection5DataMetricsRevealed(false)
-      setSection5CorePointRevealed(false)
     }
   }, [currentSection])
 
@@ -2499,12 +3044,10 @@ export default function PromotionPresentation() {
 
       // Next page: PageDown, ArrowDown, Space
       if (e.key === "PageDown" || e.key === "ArrowDown" || e.key === " ") {
-        if (
-          currentSection === SECTION3_DUAL_CIRCLES_INDEX &&
-          !section3InsightRevealed
-        ) {
+        // 第 5 屏：第一次按显示底部结论条，再按翻页
+        if (currentSection === SECTION3_INDEX && !section3FooterRevealed) {
           e.preventDefault()
-          setSection3InsightRevealed(true)
+          setSection3FooterRevealed(true)
           return
         }
         // Section4：第一次按显示「需求目标」，第二次按滚动到下一页
@@ -2513,15 +3056,59 @@ export default function PromotionPresentation() {
           setSection4DemandExtra(true)
           return
         }
-        // Section5：依次显示手机→数据模块→核心卡点
+        // Section6：第一次显示「新需求」+ 右侧图，再按翻页
+        if (currentSection === SECTION6_INDEX && !section6ExtraRevealed) {
+          e.preventDefault()
+          setSection6ExtraRevealed(true)
+          return
+        }
+        // 第 13 屏：第一次显示 STEP 02，再按翻页
+        if (
+          currentSection === SECTION_DUP_TARGET_EXECUTE_INDEX &&
+          !dupTargetStep2Revealed
+        ) {
+          e.preventDefault()
+          setDupTargetStep2Revealed(true)
+          return
+        }
+        // 第 17 屏：与第 13 屏同交互
+        if (
+          currentSection === SECTION_DUP_TARGET_EXECUTE_SLIDE17_INDEX &&
+          !dupTargetSlide17Step2Revealed
+        ) {
+          e.preventDefault()
+          setDupTargetSlide17Step2Revealed(true)
+          return
+        }
+        // 第 14 屏：先展开双卡，再展开「下载完成率」，再翻页
+        if (currentSection === SECTION_BIG_DOWNLOAD_WAIT_INDEX) {
+          e.preventDefault()
+          if (!bigDownloadCardsRevealed) {
+            setBigDownloadCardsRevealed(true)
+            return
+          }
+          if (!bigDownloadRateRevealed) {
+            setBigDownloadRateRevealed(true)
+            return
+          }
+          const nextIndex = Math.min(currentSection + 1, totalSections - 1)
+          sections[nextIndex]?.scrollIntoView({ behavior: "smooth" })
+          setCurrentSection(nextIndex)
+          return
+        }
+        // 第 15 屏：先显右卡内容，再显蓝条，再翻页
+        if (currentSection === SECTION_WELFARE_TAB_INDEX && welfareTabRevealPhase < 2) {
+          e.preventDefault()
+          setWelfareTabRevealPhase((p) => (p < 2 ? ((p + 1) as 0 | 1 | 2) : p))
+          return
+        }
+        // Section5：依次显示手机流程→数据指标，再下一页
         if (currentSection === SECTION5_INDEX) {
           e.preventDefault()
           if (section5FunnelStep < 3) {
             setSection5FunnelStep((s) => s + 1)
           } else if (!section5DataMetricsRevealed) {
             setSection5DataMetricsRevealed(true)
-          } else if (!section5CorePointRevealed) {
-            setSection5CorePointRevealed(true)
           } else {
             const nextIndex = Math.min(currentSection + 1, totalSections - 1)
             sections[nextIndex]?.scrollIntoView({ behavior: "smooth" })
@@ -2651,12 +3238,56 @@ export default function PromotionPresentation() {
           setSection4DemandExtra(false)
           return
         }
+        // Section6：已展示则先收起再退页
+        if (currentSection === SECTION6_INDEX && section6ExtraRevealed) {
+          e.preventDefault()
+          setSection6ExtraRevealed(false)
+          return
+        }
+        // 第 13 屏：STEP 02 已显示则先收起再退页
+        if (
+          currentSection === SECTION_DUP_TARGET_EXECUTE_INDEX &&
+          dupTargetStep2Revealed
+        ) {
+          e.preventDefault()
+          setDupTargetStep2Revealed(false)
+          return
+        }
+        // 第 17 屏：与第 13 屏同交互
+        if (
+          currentSection === SECTION_DUP_TARGET_EXECUTE_SLIDE17_INDEX &&
+          dupTargetSlide17Step2Revealed
+        ) {
+          e.preventDefault()
+          setDupTargetSlide17Step2Revealed(false)
+          return
+        }
+        // 第 14 屏：先收起下载完成率，再收起双卡，再退页
+        if (currentSection === SECTION_BIG_DOWNLOAD_WAIT_INDEX) {
+          e.preventDefault()
+          if (bigDownloadRateRevealed) {
+            setBigDownloadRateRevealed(false)
+            return
+          }
+          if (bigDownloadCardsRevealed) {
+            setBigDownloadCardsRevealed(false)
+            return
+          }
+          const prevIndex = Math.max(currentSection - 1, 0)
+          sections[prevIndex]?.scrollIntoView({ behavior: "smooth" })
+          setCurrentSection(prevIndex)
+          return
+        }
+        // 第 15 屏：先收蓝条 → 再隐右卡 → 再退页
+        if (currentSection === SECTION_WELFARE_TAB_INDEX && welfareTabRevealPhase > 0) {
+          e.preventDefault()
+          setWelfareTabRevealPhase((p) => (p > 0 ? ((p - 1) as 0 | 1 | 2) : p))
+          return
+        }
         // Section5：反向依次收起
         if (currentSection === SECTION5_INDEX) {
           e.preventDefault()
-          if (section5CorePointRevealed) {
-            setSection5CorePointRevealed(false)
-          } else if (section5DataMetricsRevealed) {
+          if (section5DataMetricsRevealed) {
             setSection5DataMetricsRevealed(false)
           } else if (section5FunnelStep > 0) {
             setSection5FunnelStep((s) => s - 1)
@@ -2776,7 +3407,7 @@ export default function PromotionPresentation() {
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [currentSection, section3InsightRevealed, section4DemandExtra, section5FunnelStep, section5DataMetricsRevealed, section5CorePointRevealed, section7bStep, section9Step, section12RightRevealed, section23MindsetRevealed, section21ComparisonStep, sectionAIGameCopyRevealed, section16RevealStep, section17PhoneStep, section17InsightRevealed, section19CardStep, section20CircleStep, totalSections])
+  }, [currentSection, section3FooterRevealed, section4DemandExtra, section6ExtraRevealed, dupTargetStep2Revealed, dupTargetSlide17Step2Revealed, bigDownloadCardsRevealed, bigDownloadRateRevealed, welfareTabRevealPhase, section5FunnelStep, section5DataMetricsRevealed, section7bStep, section9Step, section12RightRevealed, section23MindsetRevealed, section21ComparisonStep, sectionAIGameCopyRevealed, section16RevealStep, section17PhoneStep, section17InsightRevealed, section19CardStep, section20CircleStep, totalSections])
 
   // Update current section on scroll
   useEffect(() => {
@@ -2785,7 +3416,7 @@ export default function PromotionPresentation() {
 
     const handleScroll = () => {
       const scrollTop = container.scrollTop
-      // 与每节 h-full（相对 810px 高设计画板）、滚动容器 clientHeight 一致
+      // 与每节 h-full（相对 16:9 画板）、滚动容器 clientHeight 一致
       const sectionHeight = container.clientHeight || window.innerHeight
       // 用视口中线判定当前页，避免 smooth 滚动过程中 Math.round 与按键翻页不同步（多按一次才翻页）
       const centerLine = scrollTop + sectionHeight / 2
@@ -2797,22 +3428,14 @@ export default function PromotionPresentation() {
     return () => container.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const scaledW = 1440 * stageScale
-  const scaledH = 810 * stageScale
-
   return (
-    <div className="fixed inset-0 z-0 flex h-screen w-screen items-center justify-center overflow-hidden bg-[#050B14]">
-      <div
-        className="flex shrink-0 items-center justify-center overflow-hidden"
-        style={{ width: scaledW, height: scaledH }}
-      >
+    <div className="fixed inset-0 z-0 bg-black">
+      <div className="flex h-full w-full min-h-0 items-center justify-center">
         <div
-          className="relative isolate min-h-0 shrink-0 overflow-hidden bg-[#050B14] shadow-2xl [container-type:size]"
+          className="relative isolate min-h-0 overflow-hidden bg-[#050B14] shadow-2xl [container-type:size]"
           style={{
-            width: 1440,
-            height: 810,
-            transform: `scale(${stageScale})`,
-            transformOrigin: "center center",
+            width: "min(100dvw, calc(100dvh * 16 / 9))",
+            height: "min(100dvh, calc(100dvw * 9 / 16))",
           }}
         >
           <div
@@ -2835,24 +3458,20 @@ export default function PromotionPresentation() {
 
             <Section1 />
       <Section2 />
+      <SectionTableOfContents />
       <Section3ChapterDesign />
-      <Section3
-        insightRevealed={section3InsightRevealed}
-        onInsightReveal={() => setSection3InsightRevealed(true)}
-      />
+      <Section3 footerRevealed={section3FooterRevealed} />
+      <SectionTargetExecute />
       <Section4 demandExtraRevealed={section4DemandExtra} onDemandExtraReveal={() => setSection4DemandExtra(true)} />
       <Section4B />
       <Section5
         funnelStep={section5FunnelStep}
         dataMetricsRevealed={section5DataMetricsRevealed}
-        corePointRevealed={section5CorePointRevealed}
         onAdvance={() => {
           if (section5FunnelStep < 3) {
             setSection5FunnelStep((s) => s + 1)
           } else if (!section5DataMetricsRevealed) {
             setSection5DataMetricsRevealed(true)
-          } else if (!section5CorePointRevealed) {
-            setSection5CorePointRevealed(true)
           } else {
             const container = containerRef.current
             if (container) {
@@ -2864,8 +3483,10 @@ export default function PromotionPresentation() {
           }
         }}
       />
-      <Section6 />
-      <Section7 />
+      <Section6
+        extraRevealed={section6ExtraRevealed}
+        onExtraReveal={() => setSection6ExtraRevealed(true)}
+      />
       <Section7b
         step={section7bStep}
         onAdvance={() => {
@@ -2883,6 +3504,15 @@ export default function PromotionPresentation() {
         }}
       />
       <Section8 />
+      <SectionTargetExecute
+        step2ExtraRevealed={dupTargetStep2Revealed}
+        onRevealStep2={() => setDupTargetStep2Revealed(true)}
+      />
+      <SectionBigDownloadWait
+        bottomCardsRevealed={bigDownloadCardsRevealed}
+        completionRateRevealed={bigDownloadRateRevealed}
+      />
+      <SectionWelfareTabRevision revealPhase={welfareTabRevealPhase} />
       <Section9
         step={section9Step}
         onAdvance={() => {
@@ -2901,7 +3531,11 @@ export default function PromotionPresentation() {
           }
         }}
       />
-      <Section10 />
+      <SectionTargetExecute
+        step2ExtraRevealed={dupTargetSlide17Step2Revealed}
+        onRevealStep2={() => setDupTargetSlide17Step2Revealed(true)}
+        slide17SideHints
+      />
       <Section10b />
       <Section12 showRight={section12RightRevealed} />
       <Section13 />
@@ -2915,6 +3549,7 @@ export default function PromotionPresentation() {
       <Section19 cardStep={section19CardStep} />
       <Section20 circleStep={section20CircleStep} />
       <Section21 comparisonStep={section21ComparisonStep} />
+      <SectionLeadNewcomersThreeCards />
       <Section22 />
       <SectionChapterFutureTransition />
       <Section23 showMindset={section23MindsetRevealed} />
@@ -2940,17 +3575,72 @@ export default function PromotionPresentation() {
         </button>
       )}
 
-      {/* Page indicator - hidden by default, shows on hover */}
-      <div className="fixed right-0 top-0 bottom-0 w-16 z-50 group">
+      {/* 右侧页码定位器：悬停显示；章节锚点（01–04）悬停展开小图 + 章名 */}
+      <div className="fixed right-0 top-0 bottom-0 z-50 w-[4.75rem] group md:w-[5.75rem]">
         <div className="absolute inset-0" />
-        <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          {[...Array(31)].map((_, index) => (
+        <div className="pointer-events-auto absolute right-1 top-1/2 flex max-h-[calc(100vh-2rem)] -translate-y-1/2 flex-col items-end gap-1 overflow-y-auto overflow-x-visible py-4 opacity-0 transition-opacity duration-300 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden group-hover:opacity-100 md:right-2">
+          {[...Array(totalSections)].map((_, index) => {
+            const chapter = PAGER_CHAPTER_MARKERS.find((c) => c.index === index)
+            return (
             <button
               key={index}
               onClick={() => {
                 const container = containerRef.current
                 if (!container) return
                 const sections = container.querySelectorAll("section")
+                if (
+                  index === SECTION3_INDEX &&
+                  currentSection === SECTION3_INDEX &&
+                  !section3FooterRevealed
+                ) {
+                  setSection3FooterRevealed(true)
+                  return
+                }
+                if (
+                  index === SECTION6_INDEX &&
+                  currentSection === SECTION6_INDEX &&
+                  !section6ExtraRevealed
+                ) {
+                  setSection6ExtraRevealed(true)
+                  return
+                }
+                if (
+                  index === SECTION_DUP_TARGET_EXECUTE_INDEX &&
+                  currentSection === SECTION_DUP_TARGET_EXECUTE_INDEX &&
+                  !dupTargetStep2Revealed
+                ) {
+                  setDupTargetStep2Revealed(true)
+                  return
+                }
+                if (
+                  index === SECTION_DUP_TARGET_EXECUTE_SLIDE17_INDEX &&
+                  currentSection === SECTION_DUP_TARGET_EXECUTE_SLIDE17_INDEX &&
+                  !dupTargetSlide17Step2Revealed
+                ) {
+                  setDupTargetSlide17Step2Revealed(true)
+                  return
+                }
+                if (
+                  index === SECTION_BIG_DOWNLOAD_WAIT_INDEX &&
+                  currentSection === SECTION_BIG_DOWNLOAD_WAIT_INDEX
+                ) {
+                  if (!bigDownloadCardsRevealed) {
+                    setBigDownloadCardsRevealed(true)
+                    return
+                  }
+                  if (!bigDownloadRateRevealed) {
+                    setBigDownloadRateRevealed(true)
+                    return
+                  }
+                }
+                if (
+                  index === SECTION_WELFARE_TAB_INDEX &&
+                  currentSection === SECTION_WELFARE_TAB_INDEX &&
+                  welfareTabRevealPhase < 2
+                ) {
+                  setWelfareTabRevealPhase((p) => (p < 2 ? ((p + 1) as 0 | 1 | 2) : p))
+                  return
+                }
                 if (
                   index === SECTION12_INDEX &&
                   currentSection === SECTION12_INDEX &&
@@ -3012,27 +3702,46 @@ export default function PromotionPresentation() {
                 sections[index]?.scrollIntoView({ behavior: "smooth" })
                 setCurrentSection(index)
               }}
-              className={`flex items-center justify-end gap-1.5 rounded-full transition-all duration-300 ${
-                currentSection === index 
-                  ? "bg-white/20 px-2 py-0.5" 
-                  : "hover:bg-white/10 px-2 py-0.5"
-              }`}
-              aria-label={`Go to page ${index + 1}`}
+              className={`group/row relative flex items-center justify-end gap-1.5 rounded-full transition-all duration-300 ${
+                currentSection === index
+                  ? "bg-white/20 px-1.5 py-0.5 md:px-2"
+                  : "px-1.5 py-0.5 hover:bg-white/10 md:px-2"
+              } ${chapter ? "ring-1 ring-[#77fbd1]/30" : ""}`}
+              aria-label={chapter ? `${chapter.label}，第 ${index + 1} 页` : `第 ${index + 1} 页`}
+              title={chapter ? chapter.label : undefined}
             >
-              <span className={`text-[10px] font-medium tabular-nums ${
-                currentSection === index ? "text-white" : "text-slate-400"
-              }`}>
-                {index + 1}
+              {chapter ? (
+                <span className="pointer-events-none mr-0 max-w-0 overflow-hidden opacity-0 transition-[max-width,opacity,margin] duration-300 ease-out group-hover/row:mr-1.5 group-hover/row:max-w-[4.5rem] group-hover/row:opacity-100 md:group-hover/row:max-w-[5.25rem]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={chapter.preview}
+                    alt=""
+                    className="h-8 w-[3.5rem] shrink-0 rounded-md border border-white/15 object-cover object-center shadow-md shadow-black/40 md:h-9 md:w-[4.25rem]"
+                  />
+                </span>
+              ) : null}
+              <span className="flex min-w-0 flex-col items-end leading-none">
+                {chapter ? (
+                  <span className="mb-0.5 hidden max-w-[5.5rem] truncate text-right text-[8px] font-semibold leading-tight text-[#77fbd1] group-hover/row:block md:text-[9px]">
+                    {chapter.label}
+                  </span>
+                ) : null}
+                <span
+                  className={`text-[10px] font-medium tabular-nums ${
+                    currentSection === index ? "text-white" : "text-slate-400"
+                  }`}
+                >
+                  {index + 1}
+                </span>
               </span>
               <span
-                className={`w-2 h-2 rounded-full shrink-0 transition-all duration-300 ${
-                  currentSection === index 
-                    ? "bg-white scale-125" 
-                    : "bg-white/30 hover:bg-white/50"
+                className={`h-2 w-2 shrink-0 rounded-full transition-all duration-300 ${
+                  currentSection === index ? "scale-125 bg-white" : "bg-white/30 hover:bg-white/50"
                 }`}
               />
             </button>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>

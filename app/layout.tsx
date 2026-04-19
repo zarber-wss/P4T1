@@ -8,7 +8,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: 'P3T2 ➔ P4T1 晋升答辩 - 吴珊珊',
-  description: '交互设计师晋升答辩 - 数据驱动与AI提效下的交互设计进阶',
+  description: '交互设计师晋升答辩 - 数据驱动与AI赋能下的交互设计进阶',
   generator: 'v0.app',
   icons: {
     icon: [
