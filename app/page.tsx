@@ -2825,30 +2825,30 @@ const SECTION_DUP_TARGET_EXECUTE_SLIDE17_INDEX = 16
 /** Section12 定制 GEM 管家页索引（已移除原 Section10） */
 const SECTION12_INDEX = 18
 /** SectionAIGameCopy 游戏化文案页索引 */
-const SECTION_AIGAME_COPY_INDEX = 22
+const SECTION_AIGAME_COPY_INDEX = 21
 /** Section16 AI复盘页索引 */
-const SECTION16_INDEX = 23
+const SECTION16_INDEX = 22
 /** Section17 番茄待办页索引 */
-const SECTION17_INDEX = 24
+const SECTION17_INDEX = 23
 /** Section19 标准化基建页索引 */
-const SECTION19_INDEX = 27
+const SECTION19_INDEX = 26
 /** Section20 三举措页索引 */
-const SECTION20_INDEX = 28
+const SECTION20_INDEX = 27
 /** Section21 带新人心法页索引 */
-const SECTION21_INDEX = 29
+const SECTION21_INDEX = 28
 /** Section22 知识输出页索引（第 32 屏） */
-const SECTION22_INDEX = 31
+const SECTION22_INDEX = 30
 /** 带新人三卡片（第 31 屏） */
-const SECTION_LEAD_NEWCOMERS_INDEX = 30
+const SECTION_LEAD_NEWCOMERS_INDEX = 29
 /** Section23 角色定义页索引 */
-const SECTION23_INDEX = 33
+const SECTION23_INDEX = 32
 
 /** 右侧页码定位器：章节锚点（0-based），悬停展开小图预览与章名 */
 const PAGER_CHAPTER_MARKERS: { index: number; label: string; preview: string }[] = [
   { index: 3, label: "01 专业能力", preview: "/image4.png" },
   { index: 17, label: "02 AI赋能", preview: "/image20.png" },
-  { index: 25, label: "03 团队建设", preview: "/image28.png" },
-  { index: 31, label: "04 未来计划", preview: "/image25.png" },
+  { index: 24, label: "03 团队建设", preview: "/image28.png" },
+  { index: 30, label: "04 未来计划", preview: "/image25.png" },
 ]
 
 export default function PromotionPresentation() {
@@ -2888,7 +2888,7 @@ export default function PromotionPresentation() {
   const [section23MindsetRevealed, setSection23MindsetRevealed] = useState(false)
   /** page26：对比模块 0=无，1~3=逐条显示 */
   const [section21ComparisonStep, setSection21ComparisonStep] = useState(0)
-  const totalSections = 36
+  const totalSections = 35
   const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => {
@@ -3539,7 +3539,6 @@ export default function PromotionPresentation() {
       <Section10b />
       <Section12 showRight={section12RightRevealed} />
       <Section13 />
-      <Section14 />
       <SectionFoggBehavior />
       <SectionAIGameCopy showArrowAndAI={sectionAIGameCopyRevealed} />
       <Section16 revealStep={section16RevealStep} />
