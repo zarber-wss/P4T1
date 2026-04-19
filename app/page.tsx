@@ -2844,11 +2844,11 @@ const SECTION_LEAD_NEWCOMERS_INDEX = 29
 const SECTION23_INDEX = 32
 
 /** 右侧页码定位器：章节锚点（0-based），悬停展开小图预览与章名 */
-const PAGER_CHAPTER_MARKERS: { index: number; label: string; preview: string }[] = [
-  { index: 3, label: "01 专业能力", preview: "/image4.png" },
-  { index: 17, label: "02 AI赋能", preview: "/image20.png" },
-  { index: 24, label: "03 团队建设", preview: "/image28.png" },
-  { index: 30, label: "04 未来计划", preview: "/image25.png" },
+const PAGER_CHAPTER_MARKERS: { index: number; label: string }[] = [
+  { index: 3, label: "01 专业能力" },
+  { index: 17, label: "02 AI赋能" },
+  { index: 24, label: "03 团队建设" },
+  { index: 31, label: "04 未来计划" },
 ]
 
 export default function PromotionPresentation() {
@@ -3574,10 +3574,10 @@ export default function PromotionPresentation() {
         </button>
       )}
 
-      {/* 右侧页码定位器：悬停显示；章节锚点（01–04）悬停展开小图 + 章名 */}
+      {/* 右侧页码定位器：仅显示页码，章节页高亮章名 */}
       <div className="fixed right-0 top-0 bottom-0 z-50 w-[4.75rem] group md:w-[5.75rem]">
         <div className="absolute inset-0" />
-        <div className="pointer-events-auto absolute right-1 top-1/2 flex max-h-[calc(100vh-2rem)] -translate-y-1/2 flex-col items-end gap-1 overflow-y-auto overflow-x-visible py-4 opacity-0 transition-opacity duration-300 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden group-hover:opacity-100 md:right-2">
+        <div className="pointer-events-auto absolute right-1 top-1/2 flex max-h-[calc(100vh-2rem)] -translate-y-1/2 flex-col items-end gap-1 overflow-y-auto overflow-x-visible py-4 opacity-100 transition-opacity duration-300 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:right-2">
           {[...Array(totalSections)].map((_, index) => {
             const chapter = PAGER_CHAPTER_MARKERS.find((c) => c.index === index)
             return (
@@ -3709,16 +3709,6 @@ export default function PromotionPresentation() {
               aria-label={chapter ? `${chapter.label}，第 ${index + 1} 页` : `第 ${index + 1} 页`}
               title={chapter ? chapter.label : undefined}
             >
-              {chapter ? (
-                <span className="pointer-events-none mr-0 max-w-0 overflow-hidden opacity-0 transition-[max-width,opacity,margin] duration-300 ease-out group-hover/row:mr-1.5 group-hover/row:max-w-[4.5rem] group-hover/row:opacity-100 md:group-hover/row:max-w-[5.25rem]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={chapter.preview}
-                    alt=""
-                    className="h-8 w-[3.5rem] shrink-0 rounded-md border border-white/15 object-cover object-center shadow-md shadow-black/40 md:h-9 md:w-[4.25rem]"
-                  />
-                </span>
-              ) : null}
               <span className="flex min-w-0 flex-col items-end leading-none">
                 {chapter ? (
                   <span className="mb-0.5 hidden max-w-[5.5rem] truncate text-right text-[8px] font-semibold leading-tight text-[#77fbd1] group-hover/row:block md:text-[9px]">
