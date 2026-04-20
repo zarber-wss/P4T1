@@ -126,3 +126,90 @@
     @apply bg-background text-foreground;
   }
 }
+
+/**
+ * 打印 / 导出 PDF（Ctrl+P）
+ *
+ * 屏幕模式下根布局为 fixed + 单屏高度 + overflow 滚动，打印引擎只会按「视口高度」裁切，
+ * 因此只能看到第一屏。此处解除高度与 overflow 限制，按每节 section 分页，并保留深色背景。
+ */
+@media print {
+  html,
+  body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #050b14 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .presentation-print-ignore {
+    display: none !important;
+  }
+
+  [data-presentation-root] {
+    position: static !important;
+    inset: auto !important;
+    z-index: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: #000 !important;
+  }
+
+  [data-presentation-stage] {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+  }
+
+  [data-presentation-canvas] {
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    container-type: normal !important;
+    background: #050b14 !important;
+  }
+
+  [data-presentation-scroll] {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    scroll-snap-type: none !important;
+    overscroll-behavior: auto !important;
+    background: #050b14 !important;
+  }
+
+  [data-presentation-scroll] > section {
+    position: relative;
+    height: auto !important;
+    min-height: 100vh !important;
+    max-height: none !important;
+    overflow: visible !important;
+    break-after: page;
+    page-break-after: always;
+    break-inside: auto;
+    page-break-inside: auto;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background-color: #050b14 !important;
+  }
+
+  [data-presentation-scroll] > section:last-of-type {
+    break-after: auto;
+    page-break-after: auto;
+  }
+}

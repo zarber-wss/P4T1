@@ -3429,10 +3429,11 @@ export default function PromotionPresentation() {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-0 bg-black">
-      <div className="flex h-full w-full min-h-0 items-center justify-center">
+    <div className="presentation-root fixed inset-0 z-0 bg-black" data-presentation-root>
+      <div className="presentation-stage flex h-full w-full min-h-0 items-center justify-center" data-presentation-stage>
         <div
-          className="relative isolate min-h-0 overflow-hidden bg-[#050B14] shadow-2xl [container-type:size]"
+          className="presentation-canvas relative isolate min-h-0 overflow-hidden bg-[#050B14] shadow-2xl [container-type:size]"
+          data-presentation-canvas
           style={{
             width: "min(100dvw, calc(100dvh * 16 / 9))",
             height: "min(100dvh, calc(100dvw * 9 / 16))",
@@ -3440,16 +3441,17 @@ export default function PromotionPresentation() {
         >
           <div
             ref={containerRef}
-            className="relative z-10 h-full min-h-0 w-full overflow-y-auto overscroll-contain snap-y snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            className="presentation-scroll relative z-10 h-full min-h-0 w-full overflow-y-auto overscroll-contain snap-y snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            data-presentation-scroll
             style={{ backgroundColor: "#050B14" }}
           >
-            <div className="pointer-events-none absolute inset-0 z-0">
+            <div className="presentation-print-ignore pointer-events-none absolute inset-0 z-0">
               <div className="absolute -top-32 -left-32 h-[700px] w-[700px] rounded-full bg-[#1b2cf4]/10 blur-[160px]" />
               <div className="absolute -bottom-32 -right-32 h-[600px] w-[600px] rounded-full bg-purple-500/10 blur-[140px]" />
               <div className="absolute top-1/2 left-1/2 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/5 blur-[180px]" />
             </div>
             <div
-              className="pointer-events-none absolute inset-0 z-[1] opacity-[0.03]"
+              className="presentation-print-ignore pointer-events-none absolute inset-0 z-[1] opacity-[0.03]"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
                 backgroundRepeat: "repeat",
@@ -3564,7 +3566,7 @@ export default function PromotionPresentation() {
           onClick={() => {
             void document.documentElement.requestFullscreen()
           }}
-          className="fixed bottom-6 right-6 z-[60] flex items-center gap-2 rounded-full border border-white/20 bg-[#111827]/90 px-4 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition-all hover:border-white/40 hover:bg-[#111827]"
+          className="presentation-print-ignore fixed bottom-6 right-6 z-[60] flex items-center gap-2 rounded-full border border-white/20 bg-[#111827]/90 px-4 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition-all hover:border-white/40 hover:bg-[#111827]"
           aria-label="全屏"
         >
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -3575,9 +3577,9 @@ export default function PromotionPresentation() {
       )}
 
       {/* 右侧页码定位器：仅显示页码，章节页高亮章名 */}
-      <div className="fixed right-0 top-0 bottom-0 z-50 w-[4.75rem] group md:w-[5.75rem]">
+      <div className="presentation-print-ignore fixed right-0 top-0 bottom-0 z-50 w-[4.75rem] group md:w-[5.75rem]">
         <div className="absolute inset-0" />
-        <div className="pointer-events-auto absolute right-1 top-1/2 flex max-h-[calc(100vh-2rem)] -translate-y-1/2 flex-col items-end gap-1 overflow-y-auto overflow-x-visible py-4 opacity-100 transition-opacity duration-300 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:right-2">
+        <div className="pointer-events-auto absolute right-1 top-1/2 flex max-h-[calc(100vh-2rem)] -translate-y-1/2 flex-col items-end gap-1 overflow-y-auto overflow-x-visible py-4 opacity-0 transition-opacity duration-300 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden group-hover:opacity-100 md:right-2">
           {[...Array(totalSections)].map((_, index) => {
             const chapter = PAGER_CHAPTER_MARKERS.find((c) => c.index === index)
             return (
