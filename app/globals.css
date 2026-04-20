@@ -212,4 +212,19 @@
     break-after: auto;
     page-break-after: auto;
   }
+
+  /**
+   * Framer Motion：未滚入视口的屏仍为 hidden（opacity:0、translate 等），打印会像「只有底色的空白页」。
+   * 导出 PDF 时强制展开为可见态（不影响屏幕交互，仅 @media print）。
+   */
+  [data-presentation-scroll] > section,
+  [data-presentation-scroll] > section * {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
 }

@@ -451,8 +451,8 @@ function Section3Ambient() {
   )
 }
 
-/** 第 5 屏：设计思维的转变（布局/文案/配色参考设计稿；底光与右上标签仍用 Section3Ambient） */
-function Section3({ footerRevealed }: { footerRevealed: boolean }) {
+/** 第 5 屏：设计思维的转变（分步揭示：右侧模块 -> 底部结论） */
+function Section3({ revealStep }: { revealStep: number }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.35 })
 
@@ -516,10 +516,12 @@ function Section3({ footerRevealed }: { footerRevealed: boolean }) {
               </div>
             </motion.div>
 
-            {/* 中：双箭头 */}
+            {/* 中：双箭头（step1 起显示） */}
             <motion.div variants={fadeInUp} className="flex shrink-0 items-center justify-center text-slate-500">
               <svg
-                className="h-9 w-9 rotate-90 md:h-14 md:w-14 md:rotate-0 lg:h-16 lg:w-16 xl:h-20 xl:w-20"
+                className={`h-9 w-9 rotate-90 transition-opacity duration-300 md:h-14 md:w-14 md:rotate-0 lg:h-16 lg:w-16 xl:h-20 xl:w-20 ${
+                  revealStep >= 1 ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 aria-hidden
@@ -529,10 +531,11 @@ function Section3({ footerRevealed }: { footerRevealed: boolean }) {
               </svg>
             </motion.div>
 
-            {/* 右：把项目做起来 + 标签 */}
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-col items-center md:flex-1"
+            {/* 右：把项目做起来 + 标签（step1 起显示） */}
+            <div
+              className={`flex flex-col items-center transition-opacity duration-300 md:flex-1 ${
+                revealStep >= 1 ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}
             >
               <div className={`relative z-10 ${section3CircleSize} ${section3CircleGradient}`}>
                 <span className="text-2xl font-medium text-white md:text-3xl lg:text-4xl xl:text-5xl [text-shadow:none]">
@@ -557,10 +560,10 @@ function Section3({ footerRevealed }: { footerRevealed: boolean }) {
                 </span>
                 <span className={dottedTagCls}>用户体验</span>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
 
-          {/* 底部结论条：默认透明占位，翻页器点击后渐显，不占位变化避免版面位移 */}
+          {/* 底部结论条：step2 起显示，保持占位避免版面位移 */}
           <motion.div
             variants={fadeInUp}
             initial="hidden"
@@ -569,9 +572,9 @@ function Section3({ footerRevealed }: { footerRevealed: boolean }) {
           >
             <div
               className={`w-fit max-w-[min(100%,78rem)] rounded-full border border-white/10 bg-[#0d1623] px-12 py-3.5 text-center text-xl font-medium leading-snug text-white shadow-lg shadow-black/30 transition-opacity duration-300 md:px-[5.25rem] md:py-4 md:text-2xl lg:px-24 lg:py-4 lg:text-3xl ${
-                footerRevealed ? "opacity-100" : "pointer-events-none opacity-0"
+                revealStep >= 2 ? "opacity-100" : "pointer-events-none opacity-0"
               }`}
-              aria-hidden={!footerRevealed}
+              aria-hidden={revealStep < 2}
             >
               以<span style={{ color: accentMint }}>数据</span>为导向的<span style={{ color: accentMint }}>增长</span>体验设计
             </div>
@@ -1392,28 +1395,29 @@ function SectionWelfareTabRevision({ revealPhase }: { revealPhase: 0 | 1 | 2 }) 
             aria-hidden={!rightContentVisible}
           >
             <div className="flex min-h-0 w-full flex-1 flex-col gap-5 lg:flex-row lg:items-stretch lg:gap-5">
-              {/* 右图列加宽 + 以高度为约束等比放大（勿用 lg:w-full 否则先被宽度压扁） */}
-              <div className="flex min-h-0 w-full shrink-0 items-center justify-center border-b border-white/5 pb-4 lg:h-full lg:w-[min(58%,28rem)] lg:max-w-[30rem] lg:flex-none lg:self-stretch lg:border-b-0 lg:pb-0">
+              {/* 模块2：右图列收窄，图片在竖向约束下尽量放大 */}
+              <div className="flex min-h-0 w-full shrink-0 items-center justify-center border-b border-white/5 pb-4 lg:h-full lg:w-[min(40%,18.5rem)] lg:max-w-[20rem] lg:flex-none lg:self-stretch lg:border-b-0 lg:pb-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/welfare-tab-right-figure1.png"
                   alt="福利 Tab 分人群模块示意（图1）"
-                  className="h-auto max-h-[min(48cqh,calc(100dvh-15rem))] w-full object-contain object-top lg:block lg:h-full lg:max-h-full lg:w-auto lg:max-w-full lg:object-contain lg:object-top"
+                  className="h-auto max-h-[min(56cqh,calc(100dvh-13rem))] w-full object-contain object-top md:max-h-[min(58cqh,calc(100dvh-12rem))] lg:block lg:max-h-[min(64cqh,calc(100dvh-10rem))] lg:w-auto lg:max-w-full lg:object-contain lg:object-top"
                 />
               </div>
 
-              <div className="relative flex min-h-0 min-w-0 flex-1 flex-col gap-6 pt-6 lg:min-h-0 lg:flex-1 lg:justify-start lg:gap-7 lg:pt-10 lg:pl-2 xl:pt-12">
+              {/* 模块3：文案列加宽，标题与标签略放大 */}
+              <div className="relative flex min-h-0 min-w-0 flex-1 flex-col gap-6 pt-6 lg:min-h-0 lg:flex-[1.25] lg:basis-0 lg:justify-start lg:gap-7 lg:pt-10 lg:pl-3 xl:pl-5 xl:pt-12">
                 {points.slice(0, 2).map((p, i) => (
                   <div
                     key={p.title}
                     className={`flex shrink-0 flex-col gap-2.5 md:gap-3 ${i === 1 ? "mt-4 lg:mt-6" : ""}`}
                   >
-                    <p className="text-left text-base font-bold leading-snug text-white md:text-lg lg:text-xl">
+                    <p className="text-left text-base font-bold leading-snug text-white md:text-lg lg:text-xl xl:text-2xl">
                       <span style={{ color: mint }}>{p.num}</span> {p.title}
                     </p>
                     <div className="flex flex-wrap gap-2 md:gap-2.5">
                       {p.tags.map((t) => (
-                        <span key={t} className={tagClass}>
+                        <span key={t} className={`${tagClass} md:text-lg lg:text-xl`}>
                           {t}
                         </span>
                       ))}
@@ -1426,12 +1430,12 @@ function SectionWelfareTabRevision({ revealPhase }: { revealPhase: 0 | 1 | 2 }) 
                     key={p.title}
                     className="mt-10 flex shrink-0 flex-col gap-2.5 md:mt-12 md:gap-3 lg:mt-14"
                   >
-                    <p className="text-left text-base font-bold leading-snug text-white md:text-lg lg:text-xl">
+                    <p className="text-left text-base font-bold leading-snug text-white md:text-lg lg:text-xl xl:text-2xl">
                       <span style={{ color: mint }}>{p.num}</span> {p.title}
                     </p>
                     <div className="flex flex-wrap gap-2 md:gap-2.5">
                       {p.tags.map((t) => (
-                        <span key={t} className={tagClass}>
+                        <span key={t} className={`${tagClass} md:text-lg lg:text-xl`}>
                           {t}
                         </span>
                       ))}
@@ -1574,6 +1578,142 @@ function Section10b() {
   )
 }
 
+/** 第 19 屏：AI 赋能四列总览（底光/水印/右上导航同第 14 屏；四列由父级 revealStep 分步揭示） */
+function SectionAIEmpowerFourColumns({ revealStep }: { revealStep: number }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.15 })
+  const cardShell =
+    "flex min-h-0 flex-col rounded-2xl border border-white/10 bg-[#0d1219]/95 p-4 shadow-lg shadow-black/30 md:rounded-3xl md:p-5 lg:p-6"
+  const dashedBtn =
+    "w-full rounded-lg border border-dashed border-white/35 bg-black/25 px-3 py-2.5 text-center text-sm font-medium leading-snug text-slate-200 md:px-4 md:py-3 md:text-base lg:text-lg"
+
+  const col1Tags = ["不确定需求价值", "数据分析遇到瓶颈", "MVP最小化验证", "方案选择困难"] as const
+  const col4Tags = ["更易懂", "更简洁", "更游戏化", "更情感化"] as const
+
+  const colMotion = (stepNeed: number) => ({
+    opacity: revealStep >= stepNeed ? 1 : 0,
+    y: revealStep >= stepNeed ? 0 : 18,
+  })
+
+  return (
+    <section className="relative flex h-full w-full snap-start flex-col overflow-hidden" style={{ backgroundColor: "#000000" }}>
+      <Section3Ambient />
+
+      <motion.div
+        className="pointer-events-none absolute left-8 top-8 z-20 md:left-14 md:top-10 lg:left-16"
+        initial={{ opacity: 0, y: 12 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+        transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
+        <div className="pointer-events-auto flex max-w-[min(calc(100vw-4rem),56rem)] items-start gap-3 md:gap-3.5 lg:max-w-[60rem]">
+          <span
+            className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#1b2cf4] md:mt-2.5 md:h-3 md:w-3"
+            aria-hidden
+          />
+          <div>
+            <h2 className="text-xl font-bold leading-snug tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl">
+              以AI赋能设计：更有效、更快、更好
+            </h2>
+          </div>
+        </div>
+      </motion.div>
+
+      <div
+        ref={ref}
+        className="relative z-10 flex min-h-0 flex-1 flex-col px-4 pb-8 pt-[6.25rem] md:px-8 md:pb-10 md:pt-[7rem] lg:px-12 lg:pt-[7.5rem]"
+      >
+        <div className="mx-auto grid min-h-0 w-full max-w-[min(100%,96rem)] flex-1 grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:min-h-[min(56cqh,30rem)] lg:grid-cols-[3fr_3fr_3.5fr_2.5fr] lg:items-stretch lg:gap-3 xl:min-h-[min(58cqh,32rem)] xl:gap-4">
+          {/* 列 1：专属产品分析师（图1）；lg 下略窄于第 3 列 */}
+          <motion.div
+            initial={false}
+            animate={colMotion(1)}
+            transition={{ duration: 0.38, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className={`${cardShell} h-full min-h-0 min-w-0`}
+          >
+            <h3 className="relative z-10 mb-2 shrink-0 text-center text-base font-bold text-white md:mb-2.5 md:text-lg lg:text-xl">
+              专属产品分析师
+            </h3>
+            <div className="relative z-0 mb-2 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-white/10 bg-white shadow-inner">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/ai-empower-fig1.png"
+                alt="专属产品分析师示意"
+                className="h-full min-h-0 w-full object-contain object-center"
+              />
+            </div>
+            <div className="relative z-10 mt-auto flex shrink-0 flex-col gap-2.5 md:gap-3">
+              {col1Tags.map((t) => (
+                <span key={t} className={dashedBtn}>
+                  {t}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* 列 2：快速生成 Demo */}
+          <motion.div
+            initial={false}
+            animate={colMotion(2)}
+            transition={{ duration: 0.38, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className={`${cardShell} h-full min-h-0 min-w-0`}
+          >
+            <h3 className="relative z-10 mb-2 shrink-0 text-center text-base font-bold text-white md:mb-2.5 md:text-lg lg:text-xl">
+              快速生成 Demo
+            </h3>
+            <div className="relative z-0 flex min-h-0 min-w-0 flex-1 overflow-hidden rounded-xl border border-white/15 bg-black/40 p-0.5 md:p-1">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/GIF1.gif"
+                alt="快速生成 Demo 示意"
+                className="h-full min-h-0 w-full object-cover object-top"
+              />
+            </div>
+          </motion.div>
+
+          {/* 列 3：AI辅助设计助推 — lg 下略加宽 */}
+          <motion.div
+            initial={false}
+            animate={colMotion(3)}
+            transition={{ duration: 0.38, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className={`${cardShell} h-full min-h-0 min-w-0`}
+          >
+            <h3 className="relative z-10 mb-2 shrink-0 text-center text-base font-bold text-white md:mb-2.5 md:text-lg lg:text-xl">
+              AI辅助设计助推
+            </h3>
+            <div className="relative z-0 flex min-h-0 min-w-0 flex-1 overflow-hidden rounded-xl border border-white/15 bg-black/40 p-0.5 md:p-1">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/ai-empower-design-boost.png"
+                alt="AI辅助设计助推示意"
+                className="h-full min-h-0 w-full object-cover object-top"
+              />
+            </div>
+          </motion.div>
+
+          {/* 列 4：AI文案拟写 — lg 下略收窄 */}
+          <motion.div
+            initial={false}
+            animate={colMotion(4)}
+            transition={{ duration: 0.38, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className={`${cardShell} h-full min-h-0 min-w-0`}
+          >
+            <h3 className="relative z-10 mb-2 shrink-0 text-center text-base font-bold text-white md:mb-2.5 md:text-lg lg:text-xl">
+              AI文案拟写
+            </h3>
+            <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col justify-center gap-2.5 md:gap-3">
+              {col4Tags.map((t) => (
+                <span key={t} className={dashedBtn}>
+                  {t}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /** 第 31 屏：带新人三列卡片（文案、布局与参考稿一致） */
 function SectionLeadNewcomersThreeCards() {
   const ref = useRef(null)
@@ -1669,335 +1809,7 @@ function SectionLeadNewcomersThreeCards() {
 }
 
 // Section 11 已移除 (原 page15)
-
-// Section 12: 定制 GEM 管家（page15）
-function Section12({ showRight }: { showRight: boolean }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
-
-  const lines = [
-    "不确定需求价值",
-    "如何最小化验证想法",
-    "不知道怎么定数值",
-    "选择方案困难",
-    "新功能至少需包含哪些模块",
-    "数据遇到瓶颈，思路卡壳",
-  ]
-
-  return (
-    <section className="relative h-full w-full snap-start flex flex-col items-center justify-start overflow-hidden px-6 pb-12 pt-20 md:pt-28" style={{ backgroundColor: "#050B14" }}>
-      <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-[#1b2cf4]/22 via-[#1b2cf4]/08 to-transparent" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] bg-[#1b2cf4]/10 rounded-full blur-[100px]" />
-      <SectionDesignNavBubblesAI />
-
-      <motion.div
-        ref={ref}
-        variants={staggerContainer}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 mt-4 flex w-full max-w-6xl flex-col gap-6 px-0 md:mt-6"
-      >
-        {/* 标题：与 page16（Section13）位置、字号统一 */}
-        <motion.h2 variants={fadeInUp} className="text-2xl font-bold text-white md:text-3xl lg:text-4xl">
-          {"定制 3387 专属 GEM 管家"}
-        </motion.h2>
-
-        {/* 左图右文：左图略小，右侧左对齐并靠近图片 */}
-        <motion.div variants={fadeInUp} className="flex flex-col gap-6 md:flex-row md:items-start md:gap-4 lg:gap-5">
-          {/* Left：略缩小尺寸 */}
-          <div className="flex shrink-0 justify-center md:justify-start md:max-w-[min(38%,420px)]">
-            <div className="w-fit max-w-full rounded-2xl border border-white/5 bg-[#111827] p-2 transition-all duration-300 hover:border-[#1b2cf4]/30 md:rounded-3xl md:p-2.5">
-              <Image
-                src="/image26.png"
-                alt="产品业务数据语料库"
-                width={1400}
-                height={1000}
-                className="h-auto max-h-[min(52cqh,560px)] w-auto max-w-full object-contain"
-                sizes="(max-width: 768px) 92vw, 38vw"
-                unoptimized
-              />
-            </div>
-          </div>
-
-          {/* Right：字号加大；桌面端两列左右排布 */}
-          <div className="flex min-h-[min(50cqh,420px)] min-w-0 flex-1 flex-col justify-center gap-3.5 md:min-h-[min(58cqh,520px)] md:gap-4">
-            <div className="grid w-full grid-cols-1 items-start gap-3 md:grid-cols-2 md:gap-x-4 md:gap-y-3.5 lg:gap-x-5">
-              {lines.map((line) => (
-                <div
-                  key={line}
-                  className={`w-full max-w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-left text-lg leading-relaxed text-slate-100 transition-opacity duration-300 md:rounded-2xl md:px-5 md:py-4 md:text-xl lg:px-6 lg:py-4 lg:text-2xl ${
-                    showRight ? "opacity-100" : "pointer-events-none opacity-0"
-                  }`}
-                >
-                  {line}
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
-    </section>
-  )
-}
-
-// Section 13: AI 出方案 Demo (1) - page16
-function Section13() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
-
-  const designText = `设计一个活动
-界面元素：一个小勇士+怪物
-玩法：通过砍怪来获得宝箱奖励，当把怪砍死时，可以获得宝箱奖励。
-技能：通过看广告可以获得自动砍怪，等于不用手动砍了，再次返回APP就可以领取离线收益，看广告可以获得xx分钟，可能是半小时、1小时这种。玩家可以看10+个广告
-宝箱：如果是有看广告的用户，宝箱可以开出金币，如果是手动点击开宝箱或者使用第三方连点器开宝箱的用户，开出来的宝箱只有一些虚拟道具（不同的武器皮肤，没有什么作用，仅收集）。宝箱可以随机爆率，今天可能少一些，明天可能多一些，增加不确定性。
-新用户设计：进入的时候，引导看广告可以立马砍死一只怪获得宝箱，以此来提升第一次的爽感！
-数值设定：预计看广告的用户一天可以砍死好几只，而不看广告的用户可能就是1-2只
-金币兑换：金币可以兑换成平台币或提现，提现的话满10可以提现，兑换比例为1:1，而兑换成平台币可以按1:1.5的倍率，且支持随时兑换，希望引导用户更多进行平台币兑换而非提现`
-
-  return (
-    <section className="relative h-full w-full snap-start flex flex-col items-center justify-start overflow-hidden px-6 pb-12 pt-20 md:pt-28" style={{ backgroundColor: "#050B14" }}>
-      <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-[#1b2cf4]/22 via-[#1b2cf4]/08 to-transparent" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] bg-[#1b2cf4]/10 rounded-full blur-[100px]" />
-      <SectionDesignNavBubblesAI />
-
-      <motion.div
-        ref={ref}
-        variants={staggerContainer}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 w-full max-w-6xl flex flex-col gap-6 mt-4 md:mt-6"
-      >
-        {/* Title */}
-        <motion.h2 
-          variants={fadeInUp}
-          className="text-2xl md:text-3xl lg:text-4xl font-bold text-white"
-        >
-          AI 快速生成可交互 Demo
-        </motion.h2>
-
-        {/* 左文右图：桌面端左右列垂直居中对齐（非顶对齐） */}
-        <motion.div variants={fadeInUp} className="flex flex-col md:flex-row gap-6 md:items-center">
-          {/* Left - 文字框：仅包裹文字高度 */}
-          <div 
-            className="w-full md:w-[58%] md:flex-shrink-0 -mt-3 md:-mt-6 rounded-3xl bg-[#111827] border border-white/5 p-6 md:p-8 h-auto transition-all duration-300 hover:border-green-400/30"
-          >
-            <pre className="text-slate-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap font-sans">
-              {designText}
-            </pre>
-          </div>
-
-          {/* Right - GIF1.gif：更大尺寸，宽度随图片比例；整体上移 */}
-          <div className="w-full md:flex-1 flex justify-center -mt-5 md:-mt-16 lg:-mt-20">
-            <div 
-              className="w-fit max-w-full rounded-3xl bg-[#111827] border border-white/5 overflow-hidden transition-all duration-300 hover:border-cyan-400/30"
-            >
-              <img 
-                src="/GIF1.gif" 
-                alt="AI Demo" 
-                className="block h-auto w-auto max-w-full max-h-[min(88cqh,calc(100cqh-160px))] object-contain object-center"
-              />
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
-    </section>
-  )
-}
-
-// Section 14: AI 出方案 Demo (2) - page17
-function Section14() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
-
-  return (
-    <section className="relative h-full w-full snap-start flex flex-col items-center justify-start overflow-hidden px-6 pb-12 pt-20 md:pt-28" style={{ backgroundColor: "#050B14" }}>
-      <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-[#1b2cf4]/22 via-[#1b2cf4]/08 to-transparent" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] bg-[#1b2cf4]/10 rounded-full blur-[100px]" />
-      <SectionDesignNavBubblesAI />
-
-      <motion.div
-        ref={ref}
-        variants={staggerContainer}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 w-full max-w-6xl flex flex-col gap-6 mt-0 md:mt-1"
-      >
-        <motion.h2
-          variants={fadeInUp}
-          className="text-2xl md:text-3xl lg:text-4xl font-bold text-white"
-        >
-          AI 快速生成可交互 Demo
-        </motion.h2>
-
-        <motion.div variants={fadeInUp} className="w-full">
-          <div className="relative w-full overflow-hidden rounded-2xl border border-white/5 bg-[#111827] md:rounded-3xl h-[min(72cqh,calc(100cqh-11rem))] min-h-[280px]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/image13.png"
-              alt="AI 快速生成可交互 Demo"
-              className="h-full w-full object-cover object-center"
-            />
-          </div>
-        </motion.div>
-      </motion.div>
-    </section>
-  )
-}
-
-// page18：福格行为模型 — 布局同 page16（Section13）
-function SectionFoggBehavior() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
-
-  const designTextBody = `我是一名0.1折游戏平台的交互设计师
-我需要设计一个优惠券弹窗，在新用户首次启动APP时告诉他获得了6张不同面值的优惠券（60元、110元、180元、330元、500元、1000元），这些优惠券可以在游戏充值中使用上。
-逻辑说明：弹窗需要支持用户选择是否领取`
-
-  const designTextGoal = "设计目标：提高优惠券的领取率"
-
-  return (
-    <section className="relative h-full w-full snap-start flex flex-col items-center justify-start overflow-hidden px-6 pb-12 pt-20 md:pt-28" style={{ backgroundColor: "#050B14" }}>
-      <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-[#1b2cf4]/22 via-[#1b2cf4]/08 to-transparent" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] bg-[#1b2cf4]/10 rounded-full blur-[100px]" />
-      <SectionDesignNavBubblesAI />
-
-      <motion.div
-        ref={ref}
-        variants={staggerContainer}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 w-full max-w-6xl flex flex-col gap-6 mt-4 md:mt-6"
-      >
-        <motion.h2
-          variants={fadeInUp}
-          className="text-2xl md:text-3xl lg:text-4xl font-bold text-white"
-        >
-          AI辅助设计助推
-        </motion.h2>
-
-        <motion.div variants={fadeInUp} className="w-full md:max-w-md">
-          <div
-            className="rounded-3xl bg-[#111827] border border-white/5 p-5 md:p-7 h-auto transition-all duration-300 hover:border-green-400/30"
-          >
-            <div className="text-slate-300 text-base md:text-lg leading-relaxed font-sans whitespace-pre-wrap">
-              {designTextBody}
-            </div>
-            <p className="mt-4 text-lg md:text-xl lg:text-[1.35rem] font-semibold leading-snug text-[#77fbd1]">
-              {designTextGoal}
-            </p>
-          </div>
-        </motion.div>
-
-        {/* 小屏：图在文案下方 */}
-        <motion.div variants={fadeInUp} className="flex justify-center md:hidden">
-          <div className="w-fit max-w-full rounded-2xl bg-[#111827] border border-white/5 overflow-hidden">
-            <img
-              src="/image12.png"
-              alt="设计助推"
-              className="block h-auto w-full max-h-[min(62cqh,calc(100cqh-20rem))] object-contain object-center"
-            />
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* 右列：顶区避开定位气泡，其下垂直居中；略缩小（仅 md+） */}
-      <motion.div
-        variants={fadeInUp}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="pointer-events-none absolute left-[24%] right-14 top-24 bottom-10 z-10 hidden md:flex md:items-center md:justify-end md:pr-0 lg:left-[26%] lg:right-20 lg:top-32 lg:bottom-12"
-      >
-        <div className="pointer-events-auto w-fit max-w-[min(100%,52rem)] rounded-3xl bg-[#111827] border border-white/5 overflow-hidden transition-all duration-300 hover:border-cyan-400/30 md:-translate-x-10 lg:-translate-x-14">
-          <img
-            src="/image12.png"
-            alt="设计助推"
-            className="block h-auto w-auto max-w-full object-contain object-center max-h-[min(74cqh,calc(100cqh-10rem))] md:max-h-[min(78cqh,calc(100cqh-9rem))]"
-          />
-        </div>
-      </motion.div>
-    </section>
-  )
-}
-
-// page19：游戏化文案对比；→ 与右侧 AI 气泡需点击翻页器/空格后再展示
-function SectionAIGameCopy({ showArrowAndAI }: { showArrowAndAI: boolean }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
-
-  const rows: { original: string; ai: string }[] = [
-    { original: "排行榜虚位以待", ai: "趁现在没人，随便冲点就能霸榜" },
-    { original: "已获得1小时挂机时长", ai: "1小时全自动砍怪已开启，老哥可以去忙了" },
-    { original: "金币可支持兑换、提现", ai: "金币别闲置，可直接提现或兑换平台币" },
-  ]
-
-  return (
-    <section className="relative h-full w-full snap-start flex flex-col items-center justify-start overflow-hidden px-6 pb-12 pt-20 md:pt-28" style={{ backgroundColor: "#050B14" }}>
-      <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-[#1b2cf4]/22 via-[#1b2cf4]/08 to-transparent" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] bg-[#1b2cf4]/10 rounded-full blur-[100px]" />
-      <SectionDesignNavBubblesAI />
-
-      <motion.div
-        ref={ref}
-        variants={staggerContainer}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 w-full max-w-6xl flex flex-col mt-6 md:mt-10"
-      >
-        <motion.h2
-          variants={fadeInUp}
-          className="text-2xl md:text-3xl lg:text-4xl font-bold text-white"
-        >
-          AI辅助游戏化文案拟写
-        </motion.h2>
-
-        {/* 三列始终占位，仅用透明度/visibility 切换，避免展开时版面跳动 */}
-        <motion.div
-          variants={fadeInUp}
-          className="mx-auto mt-10 w-fit max-w-full md:mt-12"
-        >
-          <div className="grid grid-cols-1 gap-y-7 md:grid-cols-[280px_auto_auto] md:gap-y-9 md:gap-x-5 lg:gap-x-6">
-            <p className="pb-1 text-center text-lg font-bold tracking-wide text-slate-400 md:text-xl lg:text-2xl">
-              原文案
-            </p>
-            <span className="hidden min-h-[1.5rem] md:block md:min-w-[2rem]" aria-hidden />
-            <p
-              className={`pb-1 text-center text-lg font-bold tracking-wide text-[#77fbd1] transition-opacity duration-300 md:text-xl lg:text-2xl ${
-                showArrowAndAI ? "opacity-100" : "pointer-events-none opacity-0"
-              }`}
-            >
-              AI生成文案
-            </p>
-
-            {rows.map((row, i) => (
-              <Fragment key={i}>
-                <div className="flex w-full max-w-[280px] items-center rounded-2xl border border-white/5 bg-[#111827] px-4 py-4 transition-all duration-300 hover:border-[#77fbd1]/40 md:rounded-3xl md:px-5 md:py-5">
-                  <p className="w-full text-base leading-relaxed text-slate-200 md:text-lg lg:text-xl">{row.original}</p>
-                </div>
-                <div
-                  className={`flex min-h-[2.5rem] items-center justify-center py-1 transition-opacity duration-300 md:min-w-[2rem] md:py-0 ${
-                    showArrowAndAI ? "opacity-100" : "pointer-events-none opacity-0"
-                  }`}
-                  aria-hidden
-                >
-                  <span className="text-2xl font-light text-[#77fbd1] md:text-3xl lg:text-4xl">→</span>
-                </div>
-                <div
-                  className={`w-full overflow-x-auto rounded-2xl border border-[#77fbd1]/35 bg-white/5 px-4 py-4 backdrop-blur-none transition-opacity duration-300 [-webkit-overflow-scrolling:touch] md:rounded-3xl md:px-5 md:py-5 ${
-                    showArrowAndAI ? "opacity-100" : "pointer-events-none opacity-0"
-                  }`}
-                >
-                  <p className="whitespace-nowrap text-base font-medium leading-normal text-white md:text-lg lg:text-xl xl:text-2xl">
-                    {row.ai}
-                  </p>
-                </div>
-              </Fragment>
-            ))}
-          </div>
-        </motion.div>
-      </motion.div>
-    </section>
-  )
-}
+// 原第 20–23 屏（Section12 / Section13 / SectionFoggBehavior / SectionAIGameCopy）已从演示中移除
 
 // Section 16: AI 管理动作；revealStep 0=左右均隐藏，1=左侧「小组管理动作」，2=右侧「每日个人复盘」（占位不位移）
 function Section16({ revealStep }: { revealStep: number }) {
@@ -2822,40 +2634,38 @@ const SECTION_WELFARE_TAB_INDEX = 14
 const SECTION9_INDEX = 15
 /** 与第 13 屏同结构与动画（第 17 屏，STEP 02 独立显隐） */
 const SECTION_DUP_TARGET_EXECUTE_SLIDE17_INDEX = 16
-/** Section12 定制 GEM 管家页索引（已移除原 Section10） */
-const SECTION12_INDEX = 18
-/** SectionAIGameCopy 游戏化文案页索引 */
-const SECTION_AIGAME_COPY_INDEX = 21
+/** 第 19 屏：AI 赋能四列总览（分步揭示） */
+const SECTION_AI_EMPOWER_OVERVIEW_INDEX = 18
 /** Section16 AI复盘页索引 */
-const SECTION16_INDEX = 22
+const SECTION16_INDEX = 19
 /** Section17 番茄待办页索引 */
-const SECTION17_INDEX = 23
+const SECTION17_INDEX = 20
 /** Section19 标准化基建页索引 */
-const SECTION19_INDEX = 26
+const SECTION19_INDEX = 23
 /** Section20 三举措页索引 */
-const SECTION20_INDEX = 27
+const SECTION20_INDEX = 24
 /** Section21 带新人心法页索引 */
-const SECTION21_INDEX = 28
+const SECTION21_INDEX = 26
 /** Section22 知识输出页索引（第 32 屏） */
-const SECTION22_INDEX = 30
+const SECTION22_INDEX = 27
 /** 带新人三卡片（第 31 屏） */
-const SECTION_LEAD_NEWCOMERS_INDEX = 29
+const SECTION_LEAD_NEWCOMERS_INDEX = 25
 /** Section23 角色定义页索引 */
-const SECTION23_INDEX = 32
+const SECTION23_INDEX = 29
 
 /** 右侧页码定位器：章节锚点（0-based），悬停展开小图预览与章名 */
 const PAGER_CHAPTER_MARKERS: { index: number; label: string }[] = [
   { index: 3, label: "01 专业能力" },
   { index: 17, label: "02 AI赋能" },
-  { index: 24, label: "03 团队建设" },
-  { index: 31, label: "04 未来计划" },
+  { index: 21, label: "03 团队建设" },
+  { index: 28, label: "04 未来计划" },
 ]
 
 export default function PromotionPresentation() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [currentSection, setCurrentSection] = useState(0)
-  /** 第 5 屏：底部结论条，翻页器同页再点或空格后显示 */
-  const [section3FooterRevealed, setSection3FooterRevealed] = useState(false)
+  /** 第 5 屏：0=默认，1=显示右侧模块，2=显示底部结论条 */
+  const [section3RevealStep, setSection3RevealStep] = useState(0)
   const [section4DemandExtra, setSection4DemandExtra] = useState(false)
   /** 第 10 屏：新需求 + 右侧示意，翻页器/空格后显示 */
   const [section6ExtraRevealed, setSection6ExtraRevealed] = useState(false)
@@ -2875,20 +2685,19 @@ export default function PromotionPresentation() {
   const [section17InsightRevealed, setSection17InsightRevealed] = useState(false)
   /** page21：0=仅初版，1=+「>」+1.0，2=+「>」+2.0（均占位） */
   const [section17PhoneStep, setSection17PhoneStep] = useState(0)
-  const [sectionAIGameCopyRevealed, setSectionAIGameCopyRevealed] = useState(false)
   /** page20：0=左右均隐藏，1=左侧，2=右侧 */
   const [section16RevealStep, setSection16RevealStep] = useState(0)
   /** page24：0–3 当前显示卡片索引（从第一张开始） */
   const [section19CardStep, setSection19CardStep] = useState(0)
   /** page25：0=仅「标准化」，1=+「管理放权」，2=+「带新人」 */
   const [section20CircleStep, setSection20CircleStep] = useState(0)
-  /** page15：右侧要点点击翻页器后显示 */
-  const [section12RightRevealed, setSection12RightRevealed] = useState(false)
   /** page28：mindset 模块点击后显示 */
   const [section23MindsetRevealed, setSection23MindsetRevealed] = useState(false)
   /** page26：对比模块 0=无，1~3=逐条显示 */
   const [section21ComparisonStep, setSection21ComparisonStep] = useState(0)
-  const totalSections = 35
+  /** 第 19 屏：0=四列均隐藏，1~4 依次显示四列 */
+  const [sectionAIEmpowerRevealStep, setSectionAIEmpowerRevealStep] = useState(0)
+  const totalSections = 32
   const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => {
@@ -2898,10 +2707,10 @@ export default function PromotionPresentation() {
     return () => document.removeEventListener("fullscreenchange", syncFullscreen)
   }, [])
 
-  // 离开第 5 屏后重置底部结论条
+  // 离开第 5 屏后重置分步揭示
   useEffect(() => {
     if (currentSection !== SECTION3_INDEX) {
-      setSection3FooterRevealed(false)
+      setSection3RevealStep(0)
     }
   }, [currentSection])
 
@@ -2978,13 +2787,6 @@ export default function PromotionPresentation() {
     }
   }, [currentSection])
 
-  // 离开 page19 后重置「→ + AI 文案」展示
-  useEffect(() => {
-    if (currentSection !== SECTION_AIGAME_COPY_INDEX) {
-      setSectionAIGameCopyRevealed(false)
-    }
-  }, [currentSection])
-
   // 离开 page20 后重置分步展示
   useEffect(() => {
     if (currentSection !== SECTION16_INDEX) {
@@ -3006,10 +2808,10 @@ export default function PromotionPresentation() {
     }
   }, [currentSection])
 
-  // 离开 page15 后重置右侧展示
+  // 离开第 19 屏后重置四列分步
   useEffect(() => {
-    if (currentSection !== SECTION12_INDEX) {
-      setSection12RightRevealed(false)
+    if (currentSection !== SECTION_AI_EMPOWER_OVERVIEW_INDEX) {
+      setSectionAIEmpowerRevealStep(0)
     }
   }, [currentSection])
 
@@ -3044,10 +2846,10 @@ export default function PromotionPresentation() {
 
       // Next page: PageDown, ArrowDown, Space
       if (e.key === "PageDown" || e.key === "ArrowDown" || e.key === " ") {
-        // 第 5 屏：第一次按显示底部结论条，再按翻页
-        if (currentSection === SECTION3_INDEX && !section3FooterRevealed) {
+        // 第 5 屏：依次显示右侧模块、底部结论条，再翻页
+        if (currentSection === SECTION3_INDEX && section3RevealStep < 2) {
           e.preventDefault()
-          setSection3FooterRevealed(true)
+          setSection3RevealStep((s) => Math.min(s + 1, 2))
           return
         }
         // Section4：第一次按显示「需求目标」，第二次按滚动到下一页
@@ -3142,10 +2944,10 @@ export default function PromotionPresentation() {
           }
           return
         }
-        // page15：第一次按键展开右侧文字框，不翻页
-        if (currentSection === SECTION12_INDEX && !section12RightRevealed) {
+        // 第 19 屏：依次显示四列，再翻页
+        if (currentSection === SECTION_AI_EMPOWER_OVERVIEW_INDEX && sectionAIEmpowerRevealStep < 4) {
           e.preventDefault()
-          setSection12RightRevealed(true)
+          setSectionAIEmpowerRevealStep((s) => Math.min(s + 1, 4))
           return
         }
         // page26：依次显示 3 条对比，全部显示后翻页
@@ -3164,12 +2966,6 @@ export default function PromotionPresentation() {
         if (currentSection === SECTION23_INDEX && !section23MindsetRevealed) {
           e.preventDefault()
           setSection23MindsetRevealed(true)
-          return
-        }
-        // page19：第一次按键展开 → 与右侧 AI 模块，不翻页
-        if (currentSection === SECTION_AIGAME_COPY_INDEX && !sectionAIGameCopyRevealed) {
-          e.preventDefault()
-          setSectionAIGameCopyRevealed(true)
           return
         }
         // page20：先展开左侧，再展开右侧，两步均完成后再翻页
@@ -3322,10 +3118,10 @@ export default function PromotionPresentation() {
           }
           return
         }
-        // page15：若右侧已展示则先收起再退页
-        if (currentSection === SECTION12_INDEX && section12RightRevealed) {
+        // 第 19 屏：先收起第四列→…→第一列，再退页
+        if (currentSection === SECTION_AI_EMPOWER_OVERVIEW_INDEX && sectionAIEmpowerRevealStep > 0) {
           e.preventDefault()
-          setSection12RightRevealed(false)
+          setSectionAIEmpowerRevealStep((s) => Math.max(s - 1, 0))
           return
         }
         // page28：若 mindset 已展示则先收起再退页
@@ -3407,7 +3203,7 @@ export default function PromotionPresentation() {
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [currentSection, section3FooterRevealed, section4DemandExtra, section6ExtraRevealed, dupTargetStep2Revealed, dupTargetSlide17Step2Revealed, bigDownloadCardsRevealed, bigDownloadRateRevealed, welfareTabRevealPhase, section5FunnelStep, section5DataMetricsRevealed, section7bStep, section9Step, section12RightRevealed, section23MindsetRevealed, section21ComparisonStep, sectionAIGameCopyRevealed, section16RevealStep, section17PhoneStep, section17InsightRevealed, section19CardStep, section20CircleStep, totalSections])
+  }, [currentSection, section3RevealStep, section4DemandExtra, section6ExtraRevealed, dupTargetStep2Revealed, dupTargetSlide17Step2Revealed, bigDownloadCardsRevealed, bigDownloadRateRevealed, welfareTabRevealPhase, section5FunnelStep, section5DataMetricsRevealed, section7bStep, section9Step, sectionAIEmpowerRevealStep, section23MindsetRevealed, section21ComparisonStep, section16RevealStep, section17PhoneStep, section17InsightRevealed, section19CardStep, section20CircleStep, totalSections])
 
   // Update current section on scroll
   useEffect(() => {
@@ -3462,7 +3258,7 @@ export default function PromotionPresentation() {
       <Section2 />
       <SectionTableOfContents />
       <Section3ChapterDesign />
-      <Section3 footerRevealed={section3FooterRevealed} />
+      <Section3 revealStep={section3RevealStep} />
       <SectionTargetExecute />
       <Section4 demandExtraRevealed={section4DemandExtra} onDemandExtraReveal={() => setSection4DemandExtra(true)} />
       <Section4B />
@@ -3539,18 +3335,15 @@ export default function PromotionPresentation() {
         slide17SideHints
       />
       <Section10b />
-      <Section12 showRight={section12RightRevealed} />
-      <Section13 />
-      <SectionFoggBehavior />
-      <SectionAIGameCopy showArrowAndAI={sectionAIGameCopyRevealed} />
+      <SectionAIEmpowerFourColumns revealStep={sectionAIEmpowerRevealStep} />
       <Section16 revealStep={section16RevealStep} />
       <Section17 showInsight={section17InsightRevealed} phoneStep={section17PhoneStep} />
       <SectionTeamBuildTransition />
       <Section18 />
       <Section19 cardStep={section19CardStep} />
       <Section20 circleStep={section20CircleStep} />
-      <Section21 comparisonStep={section21ComparisonStep} />
       <SectionLeadNewcomersThreeCards />
+      <Section21 comparisonStep={section21ComparisonStep} />
       <Section22 />
       <SectionChapterFutureTransition />
       <Section23 showMindset={section23MindsetRevealed} />
@@ -3592,9 +3385,9 @@ export default function PromotionPresentation() {
                 if (
                   index === SECTION3_INDEX &&
                   currentSection === SECTION3_INDEX &&
-                  !section3FooterRevealed
+                  section3RevealStep < 2
                 ) {
-                  setSection3FooterRevealed(true)
+                  setSection3RevealStep((s) => Math.min(s + 1, 2))
                   return
                 }
                 if (
@@ -3643,19 +3436,11 @@ export default function PromotionPresentation() {
                   return
                 }
                 if (
-                  index === SECTION12_INDEX &&
-                  currentSection === SECTION12_INDEX &&
-                  !section12RightRevealed
+                  index === SECTION_AI_EMPOWER_OVERVIEW_INDEX &&
+                  currentSection === SECTION_AI_EMPOWER_OVERVIEW_INDEX &&
+                  sectionAIEmpowerRevealStep < 4
                 ) {
-                  setSection12RightRevealed(true)
-                  return
-                }
-                if (
-                  index === SECTION_AIGAME_COPY_INDEX &&
-                  currentSection === SECTION_AIGAME_COPY_INDEX &&
-                  !sectionAIGameCopyRevealed
-                ) {
-                  setSectionAIGameCopyRevealed(true)
+                  setSectionAIEmpowerRevealStep((s) => Math.min(s + 1, 4))
                   return
                 }
                 if (index === SECTION16_INDEX && currentSection === SECTION16_INDEX) {
